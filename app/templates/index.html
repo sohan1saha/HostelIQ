@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HostelIQ: Smart Hostel Resource & Complaint Analytics</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen font-sans">
+    <!-- Header -->
+    <header class="bg-slate-800 border-b border-slate-700 px-6 py-4 shadow-lg flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="bg-emerald-500 p-2.5 rounded-xl text-slate-900 font-bold text-xl">
+                <i class="fa-solid fa-building-user"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold tracking-wide text-white">HostelIQ Dashboard</h1>
+                <p class="text-xs text-slate-400">Smart Resource & Complaint Analytics | DCDS Lab ESE Project</p>
+            </div>
+        </div>
+        <div class="flex space-x-3 text-xs">
+            <span class="bg-emerald-950 text-emerald-400 border border-emerald-700 px-3 py-1.5 rounded-full font-semibold">
+                <i class="fa-solid fa-droplet mr-1"></i> SDG 6: Clean Water
+            </span>
+            <span class="bg-amber-950 text-amber-400 border border-amber-700 px-3 py-1.5 rounded-full font-semibold">
+                <i class="fa-solid fa-bolt mr-1"></i> SDG 12: Responsible Power
+            </span>
+            <a href="/docs" target="_blank" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-1.5 rounded-full font-semibold transition">
+                <i class="fa-solid fa-code mr-1"></i> Swagger API Docs
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto p-6 space-y-6">
+        <!-- KPI Cards Row -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Water Consumed</p>
+                <h3 class="text-2xl font-bold text-emerald-400 mt-1" id="kpi-water">Loading...</h3>
+                <p class="text-xs text-slate-400 mt-2"><i class="fa-solid fa-check text-emerald-400 mr-1"></i>SDG 6 Monitoring</p>
+            </div>
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Electricity Used</p>
+                <h3 class="text-2xl font-bold text-amber-400 mt-1" id="kpi-electricity">Loading...</h3>
+                <p class="text-xs text-slate-400 mt-2"><i class="fa-solid fa-leaf text-amber-400 mr-1"></i>SDG 12 Carbon Offset</p>
+            </div>
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Flagged Leaks & Anomalies</p>
+                <h3 class="text-2xl font-bold text-rose-400 mt-1" id="kpi-leaks">Loading...</h3>
+                <p class="text-xs text-slate-400 mt-2"><i class="fa-solid fa-triangle-exclamation text-rose-400 mr-1"></i>SQL Subquery Flagged</p>
+            </div>
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">MongoDB Complaints</p>
+                <h3 class="text-2xl font-bold text-cyan-400 mt-1" id="kpi-complaints">Loading...</h3>
+                <p class="text-xs text-slate-400 mt-2"><i class="fa-solid fa-database text-cyan-400 mr-1"></i>NoSQL Pipeline Stored</p>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- SQL Aggregation Chart -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-md font-bold text-white"><i class="fa-solid fa-chart-column text-indigo-400 mr-2"></i>Block-wise Utility Consumption (SQL Aggregation)</h2>
+                    <span class="text-xs bg-slate-700 text-slate-300 px-2.5 py-1 rounded">SQL GROUP BY</span>
+                </div>
+                <div class="h-64">
+                    <canvas id="sqlChart"></canvas>
+                </div>
+            </div>
+
+            <!-- MongoDB Aggregation Chart -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-md font-bold text-white"><i class="fa-solid fa-chart-pie text-emerald-400 mr-2"></i>Complaint Analytics (MongoDB Pipeline)</h2>
+                    <span class="text-xs bg-slate-700 text-slate-300 px-2.5 py-1 rounded">MongoDB $group</span>
+                </div>
+                <div class="h-64">
+                    <canvas id="mongoChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rubric Features & Advanced Queries Inspector -->
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow">
+            <h2 class="text-md font-bold text-white mb-4"><i class="fa-solid fa-layer-group text-amber-400 mr-2"></i>Live Advanced Query Explorer (DCDS Rubric Inspector)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div class="bg-slate-900 border border-slate-700 p-4 rounded-xl space-y-2">
+                    <h3 class="font-bold text-indigo-400 text-sm">1. Multi-Table Join</h3>
+                    <p class="text-slate-400">Combines Students, Rooms & Water logs to map room consumption.</p>
+                    <a href="/api/v1/analytics/multi-table-join" target="_blank" class="inline-block bg-slate-800 hover:bg-slate-700 border border-slate-600 text-indigo-300 px-3 py-1.5 rounded font-mono">
+                        Run Join Endpoint <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+                <div class="bg-slate-900 border border-slate-700 p-4 rounded-xl space-y-2">
+                    <h3 class="font-bold text-rose-400 text-sm">2. Nested Subquery</h3>
+                    <p class="text-slate-400">Finds rooms with water usage $> 80\%$ above overall average.</p>
+                    <a href="/api/v1/analytics/excessive-water-rooms" target="_blank" class="inline-block bg-slate-800 hover:bg-slate-700 border border-slate-600 text-rose-300 px-3 py-1.5 rounded font-mono">
+                        Run Subquery Endpoint <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+                <div class="bg-slate-900 border border-slate-700 p-4 rounded-xl space-y-2">
+                    <h3 class="font-bold text-emerald-400 text-sm">3. MongoDB Pipeline</h3>
+                    <p class="text-slate-400">Multi-stage pipeline ($match -> $group -> $sort) over JSON docs.</p>
+                    <a href="/api/v1/analytics/mongo-pipeline" target="_blank" class="inline-block bg-slate-800 hover:bg-slate-700 border border-slate-600 text-emerald-300 px-3 py-1.5 rounded font-mono">
+                        Run Pipeline Endpoint <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        async function fetchDashboardData() {
+            try {
+                // Fetch SQL Summary
+                const sqlRes = await fetch('/api/v1/analytics/block-summary');
+                const sqlData = await sqlRes.json();
+                
+                // Fetch MongoDB Pipeline Summary
+                const mongoRes = await fetch('/api/v1/analytics/mongo-pipeline');
+                const mongoData = await mongoRes.json();
+
+                // Fetch Excessive Water Rooms
+                const subqueryRes = await fetch('/api/v1/analytics/excessive-water-rooms');
+                const subqueryData = await subqueryRes.json();
+
+                // Update KPIs
+                let totalWater = 0, totalElec = 0;
+                sqlData.data.forEach(row => {
+                    totalWater += row.total_water_liters || 0;
+                    totalElec += row.total_electricity_kwh || 0;
+                });
+
+                document.getElementById('kpi-water').innerText = totalWater.toFixed(1) + ' L';
+                document.getElementById('kpi-electricity').innerText = totalElec.toFixed(1) + ' kWh';
+                document.getElementById('kpi-leaks').innerText = subqueryData.data.length + ' Rooms';
+
+                // Fetch Complaints Total
+                const compRes = await fetch('/api/v1/complaints/');
+                const compData = await compRes.json();
+                document.getElementById('kpi-complaints').innerText = compData.total_complaints + ' Complaints';
+
+                // Render SQL Chart
+                const labels = sqlData.data.map(item => `${item.block} (F${item.floor})`);
+                const waterVals = sqlData.data.map(item => item.avg_water_liters);
+                const elecVals = sqlData.data.map(item => item.avg_electricity_kwh);
+
+                new Chart(document.getElementById('sqlChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            { label: 'Avg Water (Liters)', data: waterVals, backgroundColor: '#10b981' },
+                            { label: 'Avg Power (kWh)', data: elecVals, backgroundColor: '#f59e0b' }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { labels: { color: '#94a3b8' } } },
+                        scales: {
+                            x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
+                            y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+                        }
+                    }
+                });
+
+                // Render MongoDB Chart
+                const mongoLabels = mongoData.data.map(item => item.category);
+                const mongoCounts = mongoData.data.map(item => item.total_complaints);
+
+                new Chart(document.getElementById('mongoChart'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: mongoLabels,
+                        datasets: [{
+                            data: mongoCounts,
+                            backgroundColor: ['#06b6d4', '#f43f5e', '#8b5cf6']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { labels: { color: '#94a3b8' } } }
+                    }
+                });
+
+            } catch (err) {
+                console.error("Error loading dashboard data:", err);
+            }
+        }
+
+        window.onload = fetchDashboardData;
+    </script>
+</body>
+</html>
