@@ -474,16 +474,24 @@
                     <label class="block text-slate-400 mb-1">Institutional Email</label>
                     <input type="email" id="s_email" required placeholder="student@sitpune.edu.in" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none">
                 </div>
-                <div>
-                    <label class="block text-slate-400 mb-1">Assigned Room</label>
-                    <select id="s_room_id" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none">
-                        <option value="1">Room 1 (A-101)</option>
-                        <option value="2">Room 2 (A-102)</option>
-                        <option value="3">Room 3 (A-201)</option>
-                        <option value="4">Room 4 (B-101)</option>
-                        <option value="5">Room 5 (B-201)</option>
-                    </select>
+                <!-- 2 Columns: Block & Room Number -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-400 mb-1">Hostel Block</label>
+                        <select id="s_block" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none">
+                            <option value="Block-A">Block-A</option>
+                            <option value="Block-B">Block-B</option>
+                            <option value="Block-C">Block-C</option>
+                            <option value="Block-D">Block-D</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">Room Number</label>
+                        <input type="text" id="s_room_number" required placeholder="e.g. 101, 204" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none">
+                        <span class="text-[10px] text-slate-500 mt-0.5 block">Floors 1-4 | Max 10 rooms/fl</span>
+                    </div>
                 </div>
+                <div id="studentError" class="hidden p-2.5 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-400 text-xs font-medium"></div>
                 <div class="pt-2 flex justify-end space-x-2">
                     <button type="button" onclick="closeModal('studentModal')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold">Cancel</button>
                     <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-semibold">Register Resident</button>
@@ -722,20 +730,32 @@
 
         async function submitStudent(e) {
             e.preventDefault();
+            const errDiv = document.getElementById('studentError');
+            if (errDiv) errDiv.classList.add('hidden');
+
             const payload = {
                 student_id: document.getElementById('s_student_id').value,
                 name: document.getElementById('s_name').value,
                 email: document.getElementById('s_email').value,
-                room_id: parseInt(document.getElementById('s_room_id').value)
+                block: document.getElementById('s_block').value,
+                room_number: document.getElementById('s_room_number').value
             };
+
             const res = await fetch('/api/v1/resources/student', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
+
             if (res.ok) {
                 closeModal('studentModal');
                 loadAllData();
+            } else {
+                const errData = await res.json();
+                if (errDiv) {
+                    errDiv.innerText = errData.detail || "Validation Error: Invalid room number format.";
+                    errDiv.classList.remove('hidden');
+                }
             }
         }
 

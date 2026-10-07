@@ -170,12 +170,43 @@ class SQLManager:
             conn.commit()
             return cursor.lastrowid
 
-    def add_room(self, block: str, floor: int, room_number: str, capacity: int = 2):
-        query = "INSERT INTO rooms (block, floor, room_number, capacity) VALUES (?, ?, ?, ?)"
+    def validate_and_get_room_id(self, block: str, room_number_input: str) -> int:
+        """
+        Validates room number format, floor bounds (1-4), and room ordering limits (max 10 rooms per floor: 01-10).
+        Automatically formats room string e.g., Block 'Block-A' + Room '101' -> 'A-101'.
+        """
+        raw = room_number_input.strip().upper()
+        digits = "".join([c for c in raw if c.isdigit()])
+        if not digits or len(digits) < 3:
+            raise ValueError(f"Invalid room number '{room_number_input}'. Must specify digits like 101, 204, 308.")
+
+        floor = int(digits[0])
+        room_suffix = int(digits[-2:])
+
+        if floor < 1 or floor > 4:
+            raise ValueError(f"Invalid floor level '{floor}'. Hostel floors are limited to Floors 1 through 4.")
+
+        if room_suffix < 1 or room_suffix > 10:
+            raise ValueError(f"Room number suffix '{room_suffix:02d}' exceeds limit. Max 10 rooms allowed per floor (01 to 10, e.g., {floor}01 to {floor}10).")
+
+        clean_block_code = block.split('-')[-1] if '-' in block else block
+        if not raw.startswith(clean_block_code):
+            formatted_room_no = f"{clean_block_code}-{digits}"
+        else:
+            formatted_room_no = raw
+
         with self.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(query, (block, floor, room_number, capacity))
-            conn.commit()
-            return cursor.lastrowid
+            cursor.execute("SELECT room_id FROM rooms WHERE room_number = ?", (formatted_room_no,))
+            row = cursor.fetchone()
+            if row:
+                return row["room_id"]
+            else:
+                cursor.execute(
+                    "INSERT INTO rooms (block, floor, room_number, capacity) VALUES (?, ?, ?, ?)",
+                    (block, floor, formatted_room_no, 2)
+                )
+                conn.commit()
+                return cursor.lastrowid
 
 sql_manager = SQLManager()

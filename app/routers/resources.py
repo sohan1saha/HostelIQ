@@ -16,17 +16,26 @@ class RoomCreate(BaseModel):
 @router.post("/student", status_code=status.HTTP_201_CREATED, summary="Register Resident Student")
 def create_student(payload: StudentCreate):
     try:
+        if payload.block and payload.room_number:
+            room_id = sql_manager.validate_and_get_room_id(payload.block, payload.room_number)
+        elif payload.room_id:
+            room_id = payload.room_id
+        else:
+            room_id = 1
+
         student_id = sql_manager.add_student(
             student_id=payload.student_id,
             name=payload.name,
             email=payload.email,
-            room_id=payload.room_id or 1
+            room_id=room_id
         )
         return {
             "status": "success",
             "message": "Student registered successfully",
             "student_id": payload.student_id
         }
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to register student: {str(e)}")
 
