@@ -86,10 +86,58 @@
                     <span>Log Meter Reading</span>
                 </button>
                 <div class="h-4 w-px bg-slate-800 mx-1"></div>
-                <button class="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition relative">
-                    <i class="fa-regular fa-bell"></i>
-                    <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-indigo-500"></span>
-                </button>
+                <div class="relative">
+                    <button onclick="toggleNotifications()" class="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition relative">
+                        <i class="fa-regular fa-bell text-sm"></i>
+                        <span id="notifBadge" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-indigo-500 ring-2 ring-slate-900"></span>
+                    </button>
+
+                    <!-- Notifications Dropdown Panel -->
+                    <div id="notifDropdown" class="hidden absolute right-0 mt-2 w-80 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl z-50 overflow-hidden">
+                        <div class="p-3.5 border-b border-slate-800 flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs font-bold text-white">System Notifications</span>
+                                <span id="notifCount" class="px-1.5 py-0.5 text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-bold rounded-full">3 New</span>
+                            </div>
+                            <button onclick="clearNotifications()" class="text-[11px] text-slate-400 hover:text-indigo-400 font-medium">Mark all read</button>
+                        </div>
+                        <div class="divide-y divide-slate-800/60 max-h-80 overflow-y-auto" id="notifList">
+                            <div class="p-3 hover:bg-slate-800/40 transition flex items-start space-x-3 cursor-pointer">
+                                <div class="h-7 w-7 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center shrink-0 mt-0.5">
+                                    <i class="fa-solid fa-droplet text-xs"></i>
+                                </div>
+                                <div class="flex-1 min-w-0 text-xs">
+                                    <p class="font-bold text-white">High Water Flow Warning</p>
+                                    <p class="text-slate-400 text-[11px] mt-0.5">Room A-101 exceeded daily baseline water consumption (450 Liters).</p>
+                                    <span class="text-[10px] text-slate-500 mt-1 block">10 mins ago</span>
+                                </div>
+                            </div>
+                            <div class="p-3 hover:bg-slate-800/40 transition flex items-start space-x-3 cursor-pointer">
+                                <div class="h-7 w-7 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+                                    <i class="fa-solid fa-bolt text-xs"></i>
+                                </div>
+                                <div class="flex-1 min-w-0 text-xs">
+                                    <p class="font-bold text-white">Peak Load Exceeded</p>
+                                    <p class="text-slate-400 text-[11px] mt-0.5">Block-A Floor 2 electrical load touched peak capacity limit (35.5 kWh).</p>
+                                    <span class="text-[10px] text-slate-500 mt-1 block">45 mins ago</span>
+                                </div>
+                            </div>
+                            <div class="p-3 hover:bg-slate-800/40 transition flex items-start space-x-3 cursor-pointer">
+                                <div class="h-7 w-7 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0 mt-0.5">
+                                    <i class="fa-solid fa-wrench text-xs"></i>
+                                </div>
+                                <div class="flex-1 min-w-0 text-xs">
+                                    <p class="font-bold text-white">New Maintenance Ticket</p>
+                                    <p class="text-slate-400 text-[11px] mt-0.5">Ticket #CMP1002 (Electrical) assigned to staff Suresh Yadav.</p>
+                                    <span class="text-[10px] text-slate-500 mt-1 block">2 hours ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-2.5 bg-slate-950/60 border-t border-slate-800 text-center">
+                            <span class="text-[11px] text-slate-400 hover:text-slate-200 cursor-pointer font-medium">View System Activity Logs</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -629,6 +677,30 @@
                 loadAllData();
             }
         }
+
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notifDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        function clearNotifications() {
+            const badge = document.getElementById('notifBadge');
+            const count = document.getElementById('notifCount');
+            if (badge) badge.classList.add('hidden');
+            if (count) {
+                count.innerText = '0 New';
+                count.className = 'px-1.5 py-0.5 text-[10px] bg-slate-800 text-slate-400 font-bold rounded-full';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function(e) {
+            const btn = e.target.closest('button[onclick="toggleNotifications()"]');
+            const dropdown = document.getElementById('notifDropdown');
+            if (!btn && dropdown && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
 
         window.onload = loadAllData;
     </script>
