@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full bg-slate-950">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HostelIQ: Smart Hostel Resource & Complaint Analytics</title>
+    <title>HostelIQ — Smart Campus & Hostel Management Platform</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome CDN -->
@@ -11,193 +11,626 @@
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen font-sans">
-    <!-- Header -->
-    <header class="bg-slate-800 border-b border-slate-700 px-6 py-4 shadow-lg flex justify-between items-center">
-        <div class="flex items-center space-x-3">
-            <div class="bg-emerald-500 p-2.5 rounded-xl text-slate-900 font-bold text-xl">
-                <i class="fa-solid fa-building-user"></i>
-            </div>
-            <div>
-                <h1 class="text-xl font-bold tracking-wide text-white">HostelIQ Dashboard</h1>
-                <p class="text-xs text-slate-400">Smart Resource & Complaint Analytics | DCDS Lab ESE Project</p>
-            </div>
-        </div>
-        <div class="flex space-x-3 text-xs">
-            <span class="bg-emerald-950 text-emerald-400 border border-emerald-700 px-3 py-1.5 rounded-full font-semibold">
-                <i class="fa-solid fa-droplet mr-1"></i> SDG 6: Clean Water
-            </span>
-            <span class="bg-amber-950 text-amber-400 border border-amber-700 px-3 py-1.5 rounded-full font-semibold">
-                <i class="fa-solid fa-bolt mr-1"></i> SDG 12: Responsible Power
-            </span>
-            <a href="/docs" target="_blank" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-1.5 rounded-full font-semibold transition">
-                <i class="fa-solid fa-code mr-1"></i> Swagger API Docs
-            </a>
-        </div>
-    </header>
+<body class="h-full text-slate-100 font-sans antialiased bg-slate-950 flex overflow-hidden">
 
-    <!-- Main Container -->
-    <main class="max-w-7xl mx-auto p-6 space-y-6">
-        <!-- KPI Cards Row -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow">
-                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Water Consumed</p>
-                <h3 class="text-2xl font-bold text-emerald-400 mt-1" id="kpi-water">Loading...</h3>
-                <p class="text-xs text-slate-400 mt-2"><i class="fa-solid fa-check text-emerald-400 mr-1"></i>SDG 6 Monitoring</p>
-            </div>
-            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow">
-                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Electricity Used</p>
-                <h3 class="text-2xl font-bold text-amber-400 mt-1" id="kpi-electricity">Loading...</h3>
-                <p class="text-xs text-slate-400 mt-2"><i class="fa-solid fa-leaf text-amber-400 mr-1"></i>SDG 12 Carbon Offset</p>
-            </div>
-            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow">
-                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Flagged Leaks & Anomalies</p>
-                <h3 class="text-2xl font-bold text-rose-400 mt-1" id="kpi-leaks">Loading...</h3>
-                <p class="text-xs text-slate-400 mt-2"><i class="fa-solid fa-triangle-exclamation text-rose-400 mr-1"></i>SQL Subquery Flagged</p>
-            </div>
-            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow">
-                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">MongoDB Complaints</p>
-                <h3 class="text-2xl font-bold text-cyan-400 mt-1" id="kpi-complaints">Loading...</h3>
-                <p class="text-xs text-slate-400 mt-2"><i class="fa-solid fa-database text-cyan-400 mr-1"></i>NoSQL Pipeline Stored</p>
-            </div>
-        </div>
-
-        <!-- Charts Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- SQL Aggregation Chart -->
-            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-md font-bold text-white"><i class="fa-solid fa-chart-column text-indigo-400 mr-2"></i>Block-wise Utility Consumption (SQL Aggregation)</h2>
-                    <span class="text-xs bg-slate-700 text-slate-300 px-2.5 py-1 rounded">SQL GROUP BY</span>
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between hidden md:flex">
+        <div>
+            <!-- Brand Logo -->
+            <div class="h-16 flex items-center px-6 border-b border-slate-800 space-x-3">
+                <div class="h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-indigo-600/30">
+                    <i class="fa-solid fa-building-user"></i>
                 </div>
-                <div class="h-64">
-                    <canvas id="sqlChart"></canvas>
+                <div>
+                    <span class="font-bold text-lg tracking-wide text-white">Hostel<span class="text-indigo-400">IQ</span></span>
+                    <span class="block text-[10px] text-slate-400 font-medium uppercase tracking-wider">Enterprise Hostel Portal</span>
                 </div>
             </div>
 
-            <!-- MongoDB Aggregation Chart -->
-            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-md font-bold text-white"><i class="fa-solid fa-chart-pie text-emerald-400 mr-2"></i>Complaint Analytics (MongoDB Pipeline)</h2>
-                    <span class="text-xs bg-slate-700 text-slate-300 px-2.5 py-1 rounded">MongoDB $group</span>
-                </div>
-                <div class="h-64">
-                    <canvas id="mongoChart"></canvas>
-                </div>
-            </div>
+            <!-- Navigation Links -->
+            <nav class="p-4 space-y-1 text-sm font-medium">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-indigo-600/10 text-indigo-400 font-semibold border border-indigo-500/20">
+                    <i class="fa-solid fa-chart-line w-5"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button onclick="switchTab('rooms')" id="nav-rooms" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition">
+                    <i class="fa-solid fa-bed w-5"></i>
+                    <span>Rooms & Allocation</span>
+                </button>
+                <button onclick="switchTab('utilities')" id="nav-utilities" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition">
+                    <i class="fa-solid fa-droplet w-5"></i>
+                    <span>Resource & Utilities</span>
+                </button>
+                <button onclick="switchTab('complaints')" id="nav-complaints" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition">
+                    <i class="fa-solid fa-screwdriver-wrench w-5"></i>
+                    <span>Maintenance & Complaints</span>
+                </button>
+                <button onclick="switchTab('students')" id="nav-students" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition">
+                    <i class="fa-solid fa-user-graduate w-5"></i>
+                    <span>Residents Directory</span>
+                </button>
+            </nav>
         </div>
 
-        <!-- Rubric Features & Advanced Queries Inspector -->
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow">
-            <h2 class="text-md font-bold text-white mb-4"><i class="fa-solid fa-layer-group text-amber-400 mr-2"></i>Live Advanced Query Explorer (DCDS Rubric Inspector)</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                <div class="bg-slate-900 border border-slate-700 p-4 rounded-xl space-y-2">
-                    <h3 class="font-bold text-indigo-400 text-sm">1. Multi-Table Join</h3>
-                    <p class="text-slate-400">Combines Students, Rooms & Water logs to map room consumption.</p>
-                    <a href="/api/v1/analytics/multi-table-join" target="_blank" class="inline-block bg-slate-800 hover:bg-slate-700 border border-slate-600 text-indigo-300 px-3 py-1.5 rounded font-mono">
-                        Run Join Endpoint <i class="fa-solid fa-arrow-right ml-1"></i>
-                    </a>
-                </div>
-                <div class="bg-slate-900 border border-slate-700 p-4 rounded-xl space-y-2">
-                    <h3 class="font-bold text-rose-400 text-sm">2. Nested Subquery</h3>
-                    <p class="text-slate-400">Finds rooms with water usage $> 80\%$ above overall average.</p>
-                    <a href="/api/v1/analytics/excessive-water-rooms" target="_blank" class="inline-block bg-slate-800 hover:bg-slate-700 border border-slate-600 text-rose-300 px-3 py-1.5 rounded font-mono">
-                        Run Subquery Endpoint <i class="fa-solid fa-arrow-right ml-1"></i>
-                    </a>
-                </div>
-                <div class="bg-slate-900 border border-slate-700 p-4 rounded-xl space-y-2">
-                    <h3 class="font-bold text-emerald-400 text-sm">3. MongoDB Pipeline</h3>
-                    <p class="text-slate-400">Multi-stage pipeline ($match -> $group -> $sort) over JSON docs.</p>
-                    <a href="/api/v1/analytics/mongo-pipeline" target="_blank" class="inline-block bg-slate-800 hover:bg-slate-700 border border-slate-600 text-emerald-300 px-3 py-1.5 rounded font-mono">
-                        Run Pipeline Endpoint <i class="fa-solid fa-arrow-right ml-1"></i>
-                    </a>
-                </div>
+        <!-- Admin Profile Footer -->
+        <div class="p-4 border-t border-slate-800 flex items-center space-x-3">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" class="w-9 h-9 rounded-full border border-slate-700 object-cover" alt="Admin Avatar">
+            <div class="flex-1 min-w-0">
+                <p class="text-xs font-semibold text-white truncate">Hostel Administration</p>
+                <p class="text-[11px] text-slate-400 truncate">admin@hosteliq.com</p>
             </div>
         </div>
-    </main>
+    </aside>
 
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        
+        <!-- Header Bar -->
+        <header class="h-16 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 px-6 flex items-center justify-between shrink-0">
+            <!-- Search & Filter -->
+            <div class="flex items-center space-x-4 flex-1 max-w-md">
+                <div class="relative w-full">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+                    <input type="text" placeholder="Search room, student ID, or ticket..." class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition">
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="flex items-center space-x-3">
+                <button onclick="openModal('complaintModal')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-lg shadow-indigo-600/20 transition flex items-center space-x-2">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>New Maintenance Ticket</span>
+                </button>
+                <button onclick="openModal('utilityModal')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2">
+                    <i class="fa-solid fa-gauge-high"></i>
+                    <span>Log Meter Reading</span>
+                </button>
+                <div class="h-4 w-px bg-slate-800 mx-1"></div>
+                <button class="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition relative">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-indigo-500"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Scrollable Dashboard Body -->
+        <main class="flex-1 overflow-y-auto p-6 space-y-6">
+
+            <!-- High Resource Alert Banner -->
+            <div id="anomalyBanner" class="hidden bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="h-8 w-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-amber-300">Unusual Water Consumption Alert</h4>
+                        <p class="text-xs text-amber-200/80 mt-0.5" id="anomalyText">Room A-101 registered abnormal water flow (+180% above baseline).</p>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('anomalyBanner').classList.add('hidden')" class="text-amber-400 hover:text-amber-200 text-xs px-2 py-1">Dismiss</button>
+            </div>
+
+            <!-- SECTION 1: DASHBOARD VIEW -->
+            <div id="tab-dashboard" class="space-y-6">
+                <!-- KPI Overview Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-400">Total Resident Capacity</span>
+                            <div class="h-8 w-8 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                                <i class="fa-solid fa-users text-sm"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mt-2" id="kpi-residents">10 / 12 Beds</h3>
+                        <div class="flex items-center space-x-2 mt-2">
+                            <span class="text-[11px] text-emerald-400 font-semibold flex items-center"><i class="fa-solid fa-arrow-up text-[9px] mr-1"></i>83% Occupancy</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-400">Daily Water Consumption</span>
+                            <div class="h-8 w-8 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+                                <i class="fa-solid fa-droplet text-sm"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-cyan-400 mt-2" id="kpi-water">-- L</h3>
+                        <p class="text-[11px] text-slate-400 mt-2">Real-time meter tracking</p>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-400">Power Usage Baseline</span>
+                            <div class="h-8 w-8 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
+                                <i class="fa-solid fa-bolt text-sm"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-amber-400 mt-2" id="kpi-electricity">-- kWh</h3>
+                        <p class="text-[11px] text-slate-400 mt-2">Corridor & Room total</p>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-400">Active Maintenance Tickets</span>
+                            <div class="h-8 w-8 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center">
+                                <i class="fa-solid fa-wrench text-sm"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-rose-400 mt-2" id="kpi-complaints">-- Active</h3>
+                        <p class="text-[11px] text-slate-400 mt-2">2 Resolved today</p>
+                    </div>
+                </div>
+
+                <!-- Visual Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Block Utility Analytics -->
+                    <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-5">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-sm font-bold text-white">Block-wise Resource Analytics</h3>
+                                <p class="text-xs text-slate-400">Avg Water (Liters) & Power (kWh) per Hostel Block</p>
+                            </div>
+                            <span class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-700">Live Telemetry</span>
+                        </div>
+                        <div class="h-64">
+                            <canvas id="utilityChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Complaints Category Breakdown -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-sm font-bold text-white">Grievances Breakdown</h3>
+                                <p class="text-xs text-slate-400">Category breakdown</p>
+                            </div>
+                        </div>
+                        <div class="h-64">
+                            <canvas id="complaintChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Maintenance Requests Table -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+                    <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-sm font-bold text-white">Recent Maintenance & Grievance Tickets</h3>
+                            <p class="text-xs text-slate-400">Live operational log of student issues</p>
+                        </div>
+                        <button onclick="switchTab('complaints')" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold">View All Tickets &rarr;</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-slate-950/60 text-slate-400 uppercase text-[10px] font-semibold tracking-wider border-b border-slate-800">
+                                <tr>
+                                    <th class="px-5 py-3">Ticket ID</th>
+                                    <th class="px-5 py-3">Room</th>
+                                    <th class="px-5 py-3">Category</th>
+                                    <th class="px-5 py-3">Issue Description</th>
+                                    <th class="px-5 py-3">Priority</th>
+                                    <th class="px-5 py-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentComplaintsTable" class="divide-y divide-slate-800/60">
+                                <tr><td colspan="6" class="px-5 py-4 text-center text-slate-400">Loading tickets...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: ROOMS & ALLOCATION -->
+            <div id="tab-rooms" class="space-y-6 hidden">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-white">Hostel Rooms & Bed Allocations</h2>
+                        <p class="text-xs text-slate-400">Manage room inventory, block assignments, and occupancy</p>
+                    </div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] font-semibold border-b border-slate-800">
+                            <tr>
+                                <th class="px-5 py-3">Room No</th>
+                                <th class="px-5 py-3">Block</th>
+                                <th class="px-5 py-3">Floor</th>
+                                <th class="px-5 py-3">Capacity</th>
+                                <th class="px-5 py-3">Occupancy Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="roomsTable" class="divide-y divide-slate-800">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SECTION 3: UTILITIES & RESOURCE TRACKER -->
+            <div id="tab-utilities" class="space-y-6 hidden">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-white">Water & Electricity Usage Telemetry</h2>
+                        <p class="text-xs text-slate-400">High-consumption flagging and leak detection</p>
+                    </div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden p-5">
+                    <h3 class="text-sm font-bold text-white mb-3">Excessive Consumption Watchlist</h3>
+                    <div id="excessiveRoomsList" class="space-y-2">
+                        <!-- Populated via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: MAINTENANCE & COMPLAINTS -->
+            <div id="tab-complaints" class="space-y-6 hidden">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-white">Grievances & Maintenance Desk</h2>
+                        <p class="text-xs text-slate-400">Real-time status updates and resolution timelines</p>
+                    </div>
+                    <button onclick="openModal('complaintModal')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-xs font-semibold">
+                        + Raise New Ticket
+                    </button>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] font-semibold border-b border-slate-800">
+                            <tr>
+                                <th class="px-5 py-3">Ticket ID</th>
+                                <th class="px-5 py-3">Student ID</th>
+                                <th class="px-5 py-3">Room</th>
+                                <th class="px-5 py-3">Category</th>
+                                <th class="px-5 py-3">Description</th>
+                                <th class="px-5 py-3">Priority</th>
+                                <th class="px-5 py-3">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allComplaintsTable" class="divide-y divide-slate-800">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SECTION 5: RESIDENTS DIRECTORY -->
+            <div id="tab-students" class="space-y-6 hidden">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-white">Resident Students Directory</h2>
+                        <p class="text-xs text-slate-400">List of registered residents and room allocations</p>
+                    </div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] font-semibold border-b border-slate-800">
+                            <tr>
+                                <th class="px-5 py-3">Student ID</th>
+                                <th class="px-5 py-3">Full Name</th>
+                                <th class="px-5 py-3">Institutional Email</th>
+                                <th class="px-5 py-3">Block</th>
+                                <th class="px-5 py-3">Room</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsTable" class="divide-y divide-slate-800">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- MODAL 1: RAISE MAINTENANCE TICKET -->
+    <div id="complaintModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="text-sm font-bold text-white">Raise Maintenance Ticket</h3>
+                <button onclick="closeModal('complaintModal')" class="text-slate-400 hover:text-white">&times;</button>
+            </div>
+            <form id="complaintForm" onsubmit="submitComplaint(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-slate-400 mb-1">Student ID</label>
+                    <input type="text" id="c_student_id" required value="STU2025001" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">Room Number</label>
+                    <input type="text" id="c_room_number" required value="A-101" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">Issue Category</label>
+                    <select id="c_category" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none">
+                        <option value="Water Leakage">Water Leakage / Plumbing</option>
+                        <option value="Electrical">Electrical / Appliances</option>
+                        <option value="Sanitation">Sanitation & Hygiene</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">Priority Level</label>
+                    <select id="c_priority" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none">
+                        <option value="High">High</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">Issue Description</label>
+                    <textarea id="c_description" required rows="3" placeholder="Describe the issue..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none"></textarea>
+                </div>
+                <div class="pt-2 flex justify-end space-x-2">
+                    <button type="button" onclick="closeModal('complaintModal')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-semibold">Submit Ticket</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: LOG UTILITY READING -->
+    <div id="utilityModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="text-sm font-bold text-white">Log Meter Consumption</h3>
+                <button onclick="closeModal('utilityModal')" class="text-slate-400 hover:text-white">&times;</button>
+            </div>
+            <form id="utilityForm" onsubmit="submitUtilityLog(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-slate-400 mb-1">Room ID</label>
+                    <select id="u_room_id" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none">
+                        <option value="1">Room 1 (A-101)</option>
+                        <option value="2">Room 2 (A-102)</option>
+                        <option value="3">Room 3 (A-201)</option>
+                        <option value="4">Room 4 (B-101)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">Water Used (Liters)</label>
+                    <input type="number" step="0.1" id="u_water" required value="185.0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">Leak Flag</label>
+                    <select id="u_leak" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none">
+                        <option value="0">Normal Flow</option>
+                        <option value="1">Leak Warning Flagged</option>
+                    </select>
+                </div>
+                <div class="pt-2 flex justify-end space-x-2">
+                    <button type="button" onclick="closeModal('utilityModal')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-semibold">Log Reading</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Frontend Script Logic -->
     <script>
-        async function fetchDashboardData() {
+        function switchTab(tabName) {
+            ['dashboard', 'rooms', 'utilities', 'complaints', 'students'].forEach(t => {
+                document.getElementById('tab-' + t).classList.add('hidden');
+                const nav = document.getElementById('nav-' + t);
+                if (nav) {
+                    nav.className = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition";
+                }
+            });
+
+            document.getElementById('tab-' + tabName).classList.remove('hidden');
+            const activeNav = document.getElementById('nav-' + tabName);
+            if (activeNav) {
+                activeNav.className = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-indigo-600/10 text-indigo-400 font-semibold border border-indigo-500/20";
+            }
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(id).classList.add('flex');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.getElementById(id).classList.remove('flex');
+        }
+
+        async function loadAllData() {
             try {
-                // Fetch SQL Summary
-                const sqlRes = await fetch('/api/v1/analytics/block-summary');
-                const sqlData = await sqlRes.json();
+                // 1. Fetch Block Summary
+                const bRes = await fetch('/api/v1/analytics/block-summary');
+                const bData = await bRes.json();
                 
-                // Fetch MongoDB Pipeline Summary
-                const mongoRes = await fetch('/api/v1/analytics/mongo-pipeline');
-                const mongoData = await mongoRes.json();
-
-                // Fetch Excessive Water Rooms
-                const subqueryRes = await fetch('/api/v1/analytics/excessive-water-rooms');
-                const subqueryData = await subqueryRes.json();
-
-                // Update KPIs
                 let totalWater = 0, totalElec = 0;
-                sqlData.data.forEach(row => {
-                    totalWater += row.total_water_liters || 0;
-                    totalElec += row.total_electricity_kwh || 0;
+                bData.data.forEach(r => {
+                    totalWater += r.total_water_liters || 0;
+                    totalElec += r.total_electricity_kwh || 0;
                 });
-
                 document.getElementById('kpi-water').innerText = totalWater.toFixed(1) + ' L';
                 document.getElementById('kpi-electricity').innerText = totalElec.toFixed(1) + ' kWh';
-                document.getElementById('kpi-leaks').innerText = subqueryData.data.length + ' Rooms';
 
-                // Fetch Complaints Total
-                const compRes = await fetch('/api/v1/complaints/');
-                const compData = await compRes.json();
-                document.getElementById('kpi-complaints').innerText = compData.total_complaints + ' Complaints';
+                // Render Utility Chart
+                const labels = bData.data.map(i => `${i.block} (Fl ${i.floor})`);
+                const waterVals = bData.data.map(i => i.avg_water_liters);
+                const elecVals = bData.data.map(i => i.avg_electricity_kwh);
 
-                // Render SQL Chart
-                const labels = sqlData.data.map(item => `${item.block} (F${item.floor})`);
-                const waterVals = sqlData.data.map(item => item.avg_water_liters);
-                const elecVals = sqlData.data.map(item => item.avg_electricity_kwh);
-
-                new Chart(document.getElementById('sqlChart'), {
+                new Chart(document.getElementById('utilityChart'), {
                     type: 'bar',
                     data: {
                         labels: labels,
                         datasets: [
-                            { label: 'Avg Water (Liters)', data: waterVals, backgroundColor: '#10b981' },
-                            { label: 'Avg Power (kWh)', data: elecVals, backgroundColor: '#f59e0b' }
+                            { label: 'Water (Liters)', data: waterVals, backgroundColor: '#06b6d4', borderRadius: 6 },
+                            { label: 'Electricity (kWh)', data: elecVals, backgroundColor: '#f59e0b', borderRadius: 6 }
                         ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { labels: { color: '#94a3b8' } } },
+                        plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
                         scales: {
-                            x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
-                            y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+                            x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
+                            y: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } }
                         }
                     }
                 });
 
-                // Render MongoDB Chart
-                const mongoLabels = mongoData.data.map(item => item.category);
-                const mongoCounts = mongoData.data.map(item => item.total_complaints);
+                // 2. Fetch Mongo Analytics
+                const mRes = await fetch('/api/v1/analytics/mongo-pipeline');
+                const mData = await mRes.json();
 
-                new Chart(document.getElementById('mongoChart'), {
+                new Chart(document.getElementById('complaintChart'), {
                     type: 'doughnut',
                     data: {
-                        labels: mongoLabels,
+                        labels: mData.data.map(i => i.category),
                         datasets: [{
-                            data: mongoCounts,
-                            backgroundColor: ['#06b6d4', '#f43f5e', '#8b5cf6']
+                            data: mData.data.map(i => i.total_complaints),
+                            backgroundColor: ['#06b6d4', '#f43f5e', '#8b5cf6'],
+                            borderWidth: 0
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { labels: { color: '#94a3b8' } } }
+                        plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } }
                     }
                 });
+
+                // 3. Fetch Complaints
+                const cRes = await fetch('/api/v1/complaints/');
+                const cData = await cRes.json();
+                document.getElementById('kpi-complaints').innerText = cData.total_complaints + ' Active';
+
+                let recentHtml = '', allHtml = '';
+                cData.data.forEach(item => {
+                    const statusClass = item.status === 'Resolved' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : (item.status === 'In Progress' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20');
+                    const priorityClass = item.priority === 'High' || item.priority === 'Critical' ? 'text-rose-400 font-bold' : 'text-slate-300';
+                    
+                    const row = `
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="px-5 py-3.5 font-mono text-indigo-400 font-semibold">${item.complaint_id}</td>
+                            <td class="px-5 py-3.5 font-bold text-white">${item.room_number}</td>
+                            <td class="px-5 py-3.5">${item.category}</td>
+                            <td class="px-5 py-3.5 text-slate-300 max-w-xs truncate">${item.description}</td>
+                            <td class="px-5 py-3.5 ${priorityClass}">${item.priority}</td>
+                            <td class="px-5 py-3.5"><span class="px-2.5 py-1 rounded-full border text-[10px] font-semibold ${statusClass}">${item.status}</span></td>
+                        </tr>
+                    `;
+                    recentHtml += row;
+
+                    const allRow = `
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="px-5 py-3.5 font-mono text-indigo-400 font-semibold">${item.complaint_id}</td>
+                            <td class="px-5 py-3.5 text-slate-400">${item.student_id}</td>
+                            <td class="px-5 py-3.5 font-bold text-white">${item.room_number}</td>
+                            <td class="px-5 py-3.5">${item.category}</td>
+                            <td class="px-5 py-3.5 text-slate-300">${item.description}</td>
+                            <td class="px-5 py-3.5 ${priorityClass}">${item.priority}</td>
+                            <td class="px-5 py-3.5"><span class="px-2.5 py-1 rounded-full border text-[10px] font-semibold ${statusClass}">${item.status}</span></td>
+                        </tr>
+                    `;
+                    allHtml += allRow;
+                });
+                document.getElementById('recentComplaintsTable').innerHTML = recentHtml;
+                document.getElementById('allComplaintsTable').innerHTML = allHtml;
+
+                // 4. Fetch Multi-table Join for Students & Rooms
+                const jRes = await fetch('/api/v1/analytics/multi-table-join');
+                const jData = await jRes.json();
+                
+                let studentsHtml = '';
+                let roomsMap = {};
+                jData.data.forEach(s => {
+                    studentsHtml += `
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="px-5 py-3.5 font-mono text-indigo-400 font-semibold">${s.student_id}</td>
+                            <td class="px-5 py-3.5 font-semibold text-white">${s.student_name}</td>
+                            <td class="px-5 py-3.5 text-slate-400">${s.email}</td>
+                            <td class="px-5 py-3.5">${s.block}</td>
+                            <td class="px-5 py-3.5 font-bold text-slate-200">${s.room_number}</td>
+                        </tr>
+                    `;
+                    roomsMap[s.room_number] = { block: s.block, room_number: s.room_number };
+                });
+                document.getElementById('studentsTable').innerHTML = studentsHtml;
+
+                let roomsHtml = '';
+                Object.keys(roomsMap).forEach(rKey => {
+                    roomsHtml += `
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="px-5 py-3.5 font-bold text-white">${rKey}</td>
+                            <td class="px-5 py-3.5">${roomsMap[rKey].block}</td>
+                            <td class="px-5 py-3.5">Floor 1</td>
+                            <td class="px-5 py-3.5">2 Beds</td>
+                            <td class="px-5 py-3.5"><span class="px-2.5 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 text-[10px] font-semibold">Occupied</span></td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('roomsTable').innerHTML = roomsHtml;
+
+                // 5. Fetch Excessive Water Rooms
+                const exRes = await fetch('/api/v1/analytics/excessive-water-rooms');
+                const exData = await exRes.json();
+                
+                if (exData.data && exData.data.length > 0) {
+                    document.getElementById('anomalyBanner').classList.remove('hidden');
+                    document.getElementById('anomalyText').innerText = `Room ${exData.data[0].room_number} (${exData.data[0].block}) registered abnormal water consumption (${exData.data[0].water_used_liters} Liters).`;
+                    
+                    let exHtml = '';
+                    exData.data.forEach(r => {
+                        exHtml += `
+                            <div class="p-3 bg-slate-950 rounded-xl border border-rose-500/20 flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs font-bold text-white">Room ${r.room_number} (${r.block})</span>
+                                    <p class="text-[11px] text-slate-400">Consumption: <span class="text-rose-400 font-bold">${r.water_used_liters} L</span> (Baseline Avg: ${r.overall_avg_water} L)</p>
+                                </div>
+                                <span class="px-2.5 py-1 bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[10px] font-semibold rounded-lg">High Leak Warning</span>
+                            </div>
+                        `;
+                    });
+                    document.getElementById('excessiveRoomsList').innerHTML = exHtml;
+                }
 
             } catch (err) {
                 console.error("Error loading dashboard data:", err);
             }
         }
 
-        window.onload = fetchDashboardData;
+        async function submitComplaint(e) {
+            e.preventDefault();
+            const payload = {
+                student_id: document.getElementById('c_student_id').value,
+                room_number: document.getElementById('c_room_number').value,
+                category: document.getElementById('c_category').value,
+                sdg_target: "SDG 6",
+                description: document.getElementById('c_description').value,
+                priority: document.getElementById('c_priority').value
+            };
+            const res = await fetch('/api/v1/complaints/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (res.ok) {
+                closeModal('complaintModal');
+                loadAllData();
+            }
+        }
+
+        async function submitUtilityLog(e) {
+            e.preventDefault();
+            const payload = {
+                room_id: parseInt(document.getElementById('u_room_id').value),
+                log_date: new Date().toISOString().split('T')[0],
+                water_used_liters: parseFloat(document.getElementById('u_water').value),
+                leak_flag: parseInt(document.getElementById('u_leak').value)
+            };
+            const res = await fetch('/api/v1/resources/water-log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (res.ok) {
+                closeModal('utilityModal');
+                loadAllData();
+            }
+        }
+
+        window.onload = loadAllData;
     </script>
 </body>
 </html>
