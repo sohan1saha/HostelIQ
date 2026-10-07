@@ -3,6 +3,11 @@ from app.main import app
 
 client = TestClient(app)
 
+def test_dashboard_root_endpoint():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "HostelIQ" in response.text
+
 def test_health_check():
     response = client.get("/health")
     assert response.status_code == 200

@@ -38,7 +38,7 @@ def render_dashboard(request: Request):
     """
     Renders the live visual analytics dashboard.
     """
-    return templates.TemplateResponse("index.html", {"request": request, "title": settings.PROJECT_NAME})
+    return templates.TemplateResponse(request=request, name="index.html", context={"title": settings.PROJECT_NAME})
 
 @app.get("/health", summary="System Health Check")
 def health_check():
