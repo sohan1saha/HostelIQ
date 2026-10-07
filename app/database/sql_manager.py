@@ -162,4 +162,20 @@ class SQLManager:
             conn.commit()
             return cursor.lastrowid
 
+    def add_student(self, student_id: str, name: str, email: str, room_id: int):
+        query = "INSERT INTO students (student_id, name, email, room_id) VALUES (?, ?, ?, ?)"
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, (student_id, name, email, room_id))
+            conn.commit()
+            return cursor.lastrowid
+
+    def add_room(self, block: str, floor: int, room_number: str, capacity: int = 2):
+        query = "INSERT INTO rooms (block, floor, room_number, capacity) VALUES (?, ?, ?, ?)"
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, (block, floor, room_number, capacity))
+            conn.commit()
+            return cursor.lastrowid
+
 sql_manager = SQLManager()

@@ -76,14 +76,18 @@
             </div>
 
             <!-- Header Actions -->
-            <div class="flex items-center space-x-3">
-                <button onclick="openModal('complaintModal')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-lg shadow-indigo-600/20 transition flex items-center space-x-2">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>New Maintenance Ticket</span>
+            <div class="flex items-center space-x-2.5">
+                <button onclick="openModal('studentModal')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center space-x-1.5">
+                    <i class="fa-solid fa-user-plus text-xs"></i>
+                    <span>Register Resident</span>
                 </button>
-                <button onclick="openModal('utilityModal')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2">
-                    <i class="fa-solid fa-gauge-high"></i>
-                    <span>Log Meter Reading</span>
+                <button onclick="openModal('complaintModal')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-xl text-xs font-semibold shadow-lg shadow-indigo-600/20 transition flex items-center space-x-1.5">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                    <span>Maintenance Ticket</span>
+                </button>
+                <button onclick="openModal('utilityModal')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center space-x-1.5">
+                    <i class="fa-solid fa-gauge-high text-xs"></i>
+                    <span>Log Meter</span>
                 </button>
                 <div class="h-4 w-px bg-slate-800 mx-1"></div>
                 <div class="relative">
@@ -450,6 +454,44 @@
         </div>
     </div>
 
+    <!-- MODAL 3: REGISTER RESIDENT STUDENT -->
+    <div id="studentModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="text-sm font-bold text-white">Register Resident Student</h3>
+                <button onclick="closeModal('studentModal')" class="text-slate-400 hover:text-white">&times;</button>
+            </div>
+            <form id="studentForm" onsubmit="submitStudent(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-slate-400 mb-1">Student ID</label>
+                    <input type="text" id="s_student_id" required placeholder="e.g. STU2025006" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">Full Name</label>
+                    <input type="text" id="s_name" required placeholder="Student Name" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">Institutional Email</label>
+                    <input type="email" id="s_email" required placeholder="student@sitpune.edu.in" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">Assigned Room</label>
+                    <select id="s_room_id" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none">
+                        <option value="1">Room 1 (A-101)</option>
+                        <option value="2">Room 2 (A-102)</option>
+                        <option value="3">Room 3 (A-201)</option>
+                        <option value="4">Room 4 (B-101)</option>
+                        <option value="5">Room 5 (B-201)</option>
+                    </select>
+                </div>
+                <div class="pt-2 flex justify-end space-x-2">
+                    <button type="button" onclick="closeModal('studentModal')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-semibold">Register Resident</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Frontend Script Logic -->
     <script>
         function switchTab(tabName) {
@@ -674,6 +716,25 @@
             });
             if (res.ok) {
                 closeModal('utilityModal');
+                loadAllData();
+            }
+        }
+
+        async function submitStudent(e) {
+            e.preventDefault();
+            const payload = {
+                student_id: document.getElementById('s_student_id').value,
+                name: document.getElementById('s_name').value,
+                email: document.getElementById('s_email').value,
+                room_id: parseInt(document.getElementById('s_room_id').value)
+            };
+            const res = await fetch('/api/v1/resources/student', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (res.ok) {
+                closeModal('studentModal');
                 loadAllData();
             }
         }
