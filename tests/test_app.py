@@ -61,3 +61,22 @@ def test_water_log_pydantic_validation_failure():
     }
     response = client.post("/api/v1/resources/water-log", json=invalid_payload)
     assert response.status_code == 422  # Unprocessable Entity
+
+def test_consumption_breakdown_endpoints():
+    # Test room-wise
+    r1 = client.get("/api/v1/analytics/consumption-breakdown?group_by=room")
+    assert r1.status_code == 200
+    assert len(r1.json()["items"]) > 0
+
+    # Test floor-wise
+    r2 = client.get("/api/v1/analytics/consumption-breakdown?group_by=floor")
+    assert r2.status_code == 200
+    assert "conjoined_summary" in r2.json()
+
+    # Test conjoining specific rooms
+    r3 = client.get("/api/v1/analytics/consumption-breakdown?group_by=conjoined&rooms=A-101,B-101")
+    assert r3.status_code == 200
+    summary = r3.json()["conjoined_summary"]
+    assert summary["total_rooms"] == 2
+    assert summary["total_water"] > 0
+

@@ -81,3 +81,34 @@ def get_mongo_aggregation_analytics():
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"MongoDB Aggregation Failed: {str(e)}")
+
+@router.get("/consumption-breakdown", summary="Multi-Level Consumption Analytics (Room, Floor, Block, Conjoined)")
+def get_consumption_breakdown(
+    group_by: str = Query("room", description="Granularity: 'room' | 'floor' | 'block' | 'conjoined'"),
+    blocks: str = Query(None, description="Comma-separated blocks e.g. Block-A,Block-B"),
+    floors: str = Query(None, description="Comma-separated floor numbers e.g. 1,2"),
+    rooms: str = Query(None, description="Comma-separated room numbers e.g. A-101,B-101")
+):
+    """
+    Multi-Level Resource Consumption Telemetry Explorer:
+    Enables granular slicing and conjoining of Water and Electricity consumption:
+    - Room-wise
+    - Floor-wise
+    - Block-wise
+    - Conjoining 2 or more rooms, floors, blocks, or all
+    """
+    try:
+        block_list = [b.strip() for b in blocks.split(",") if b.strip()] if blocks else None
+        floor_list = [int(f.strip()) for f in floors.split(",") if f.strip() and f.strip().isdigit()] if floors else None
+        room_list = [r.strip() for r in rooms.split(",") if r.strip()] if rooms else None
+
+        data = sql_manager.get_consumption_breakdown(
+            group_by=group_by,
+            blocks=block_list,
+            floors=floor_list,
+            room_numbers=room_list
+        )
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch consumption breakdown: {str(e)}")
+

@@ -222,7 +222,13 @@
                                 <h3 class="text-sm font-bold text-white">Block-wise Resource Analytics</h3>
                                 <p class="text-xs text-slate-400">Avg Water (Liters) & Power (kWh) per Hostel Block</p>
                             </div>
-                            <span class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-700">Live Telemetry</span>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-700">Live Telemetry</span>
+                                <button onclick="switchTab('utilities')" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center space-x-1 px-2 py-1 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 rounded-lg transition">
+                                    <span>Deep Explorer</span>
+                                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="h-64">
                             <canvas id="utilityChart"></canvas>
@@ -300,14 +306,174 @@
 
             <!-- SECTION 3: UTILITIES & RESOURCE TRACKER -->
             <div id="tab-utilities" class="space-y-6 hidden">
-                <div class="flex items-center justify-between">
+                <!-- Header with Title & Action Button -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-lg font-bold text-white">Water & Electricity Usage Telemetry</h2>
-                        <p class="text-xs text-slate-400">High-consumption flagging and leak detection</p>
+                        <h2 class="text-lg font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-chart-pie text-cyan-400"></i>
+                            <span>Consumption Telemetry & Resource Explorer</span>
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5">Sustainably analyze, compare, and conjoin water & electricity usage room-wise, floor-wise, block-wise, or custom cohorts</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="openModal('utilityModal')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-lg shadow-indigo-600/20 transition flex items-center space-x-1.5">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                            <span>Log Meter Reading</span>
+                        </button>
                     </div>
                 </div>
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden p-5">
-                    <h3 class="text-sm font-bold text-white mb-3">Excessive Consumption Watchlist</h3>
+
+                <!-- Multi-Level Controls & Filters Card -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+                    <!-- Row 1: Granularity Selector & Presets -->
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1">View Granularity:</span>
+                            <div class="inline-flex bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
+                                <button onclick="setConsumptionView('room')" id="btn-view-room" class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white shadow transition">
+                                    <i class="fa-solid fa-door-open mr-1"></i> Room-wise
+                                </button>
+                                <button onclick="setConsumptionView('floor')" id="btn-view-floor" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">
+                                    <i class="fa-solid fa-layer-group mr-1"></i> Floor-wise
+                                </button>
+                                <button onclick="setConsumptionView('block')" id="btn-view-block" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">
+                                    <i class="fa-solid fa-building mr-1"></i> Block-wise
+                                </button>
+                                <button onclick="setConsumptionView('conjoined')" id="btn-view-conjoined" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">
+                                    <i class="fa-solid fa-link mr-1"></i> Conjoined Cohort
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick Presets -->
+                        <div class="flex items-center space-x-1.5 text-xs flex-wrap">
+                            <span class="text-slate-400 mr-1">Quick Presets:</span>
+                            <button onclick="applyPreset('all')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition">All Campus</button>
+                            <button onclick="applyPreset('blockA_vs_B')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition">Block-A vs B</button>
+                            <button onclick="applyPreset('floors_1_2')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition">Floors 1 & 2</button>
+                            <button onclick="applyPreset('rooms_heavy')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition">A-101 + B-101</button>
+                            <button onclick="resetConsumptionFilters()" class="px-2 py-1 bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-slate-200 rounded-lg border border-slate-800 transition" title="Reset Filters"><i class="fa-solid fa-rotate-left"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Conjoining Multi-Filter Selectors -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                        <!-- Block Filter -->
+                        <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-slate-200 flex items-center"><i class="fa-solid fa-building text-indigo-400 mr-1.5"></i>Filter / Conjoin Blocks:</span>
+                                <button onclick="toggleAllFilter('blocks')" class="text-[11px] text-indigo-400 hover:text-indigo-300">Select All</button>
+                            </div>
+                            <div id="filterBlocksContainer" class="flex flex-wrap gap-2 pt-1">
+                                <!-- Dynamic block checkboxes -->
+                            </div>
+                        </div>
+
+                        <!-- Floor Filter -->
+                        <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-slate-200 flex items-center"><i class="fa-solid fa-layer-group text-cyan-400 mr-1.5"></i>Filter / Conjoin Floors:</span>
+                                <button onclick="toggleAllFilter('floors')" class="text-[11px] text-cyan-400 hover:text-cyan-300">Select All</button>
+                            </div>
+                            <div id="filterFloorsContainer" class="flex flex-wrap gap-2 pt-1">
+                                <!-- Dynamic floor checkboxes -->
+                            </div>
+                        </div>
+
+                        <!-- Room Filter -->
+                        <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-slate-200 flex items-center"><i class="fa-solid fa-door-open text-amber-400 mr-1.5"></i>Filter / Conjoin Specific Rooms:</span>
+                                <button onclick="toggleAllFilter('rooms')" class="text-[11px] text-amber-400 hover:text-amber-300">Select All</button>
+                            </div>
+                            <div id="filterRoomsContainer" class="max-h-24 overflow-y-auto flex flex-wrap gap-1.5 pt-1">
+                                <!-- Dynamic room pills -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Conjoined Cohort Metrics Banner -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Cohort Scope</span>
+                        <h3 class="text-xl font-bold text-white mt-1" id="exp-kpi-scope">-- Units</h3>
+                        <p class="text-[11px] text-slate-400 mt-1" id="exp-kpi-scope-desc">Active selection</p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Conjoined Water Total</span>
+                        <h3 class="text-xl font-bold text-cyan-400 mt-1" id="exp-kpi-water">-- L</h3>
+                        <p class="text-[11px] text-slate-400 mt-1" id="exp-kpi-water-avg">Avg: -- L / unit</p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Conjoined Power Total</span>
+                        <h3 class="text-xl font-bold text-amber-400 mt-1" id="exp-kpi-elec">-- kWh</h3>
+                        <p class="text-[11px] text-slate-400 mt-1" id="exp-kpi-elec-avg">Avg: -- kWh / unit</p>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Alerts in Selection</span>
+                        <h3 class="text-xl font-bold text-rose-400 mt-1" id="exp-kpi-alerts">-- Flags</h3>
+                        <p class="text-[11px] text-slate-400 mt-1" id="exp-kpi-alerts-desc">Leak & peak warnings</p>
+                    </div>
+                </div>
+
+                <!-- Comparative Visual Chart Section -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-sm font-bold text-white" id="expChartTitle">Comparative Resource Telemetry Chart</h3>
+                            <p class="text-xs text-slate-400" id="expChartSubtitle">Side-by-side Water (Liters) and Electricity (kWh) consumption across selected units</p>
+                        </div>
+                        <div class="flex items-center space-x-2 text-xs">
+                            <span class="inline-flex items-center px-2 py-1 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20"><i class="fa-solid fa-droplet text-[10px] mr-1"></i> Water (L)</span>
+                            <span class="inline-flex items-center px-2 py-1 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20"><i class="fa-solid fa-bolt text-[10px] mr-1"></i> Power (kWh)</span>
+                        </div>
+                    </div>
+                    <div class="h-72">
+                        <canvas id="explorerChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Detailed Breakdown Table with Conjoined Grand Total Footer -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+                    <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+                        <h3 class="text-sm font-bold text-white" id="expTableTitle">Itemized Consumption Breakdown</h3>
+                        <span id="expTableBadge" class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-lg font-semibold">5 Records</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] font-semibold border-b border-slate-800">
+                                <tr>
+                                    <th class="px-5 py-3">Unit / Target</th>
+                                    <th class="px-5 py-3">Block</th>
+                                    <th class="px-5 py-3">Floor</th>
+                                    <th class="px-5 py-3 text-right">Water Used (L)</th>
+                                    <th class="px-5 py-3 text-right">Power Used (kWh)</th>
+                                    <th class="px-5 py-3 text-center">Leak Warnings</th>
+                                    <th class="px-5 py-3 text-center">Peak Warnings</th>
+                                    <th class="px-5 py-3 text-center">Telemetry Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="explorerTableBody" class="divide-y divide-slate-800/70">
+                                <!-- Populated via JS -->
+                            </tbody>
+                            <!-- Conjoined Grand Total Footer -->
+                            <tfoot id="explorerTableFooter" class="bg-slate-950 font-bold border-t-2 border-indigo-500/40">
+                                <!-- Populated via JS -->
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Excessive Consumption Watchlist Section -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-sm font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-triangle-exclamation text-rose-400"></i>
+                            <span>Anomaly & Excessive Consumption Watchlist</span>
+                        </h3>
+                        <span class="text-xs bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2.5 py-0.5 rounded-full font-semibold">Live Audit</span>
+                    </div>
                     <div id="excessiveRoomsList" class="space-y-2">
                         <!-- Populated via JS -->
                     </div>
@@ -515,6 +681,10 @@
             const activeNav = document.getElementById('nav-' + tabName);
             if (activeNav) {
                 activeNav.className = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-indigo-600/10 text-indigo-400 font-semibold border border-indigo-500/20";
+            }
+
+            if (tabName === 'utilities') {
+                loadConsumptionExplorer(false);
             }
         }
 
@@ -725,6 +895,7 @@
             if (res.ok) {
                 closeModal('utilityModal');
                 loadAllData();
+                loadConsumptionExplorer(true);
             }
         }
 
@@ -783,7 +954,333 @@
             }
         });
 
-        window.onload = loadAllData;
+        // ==========================================
+        // CONSUMPTION TELEMETRY EXPLORER LOGIC
+        // ==========================================
+        let currentConsumptionView = 'room'; // 'room' | 'floor' | 'block' | 'conjoined'
+        let selectedBlocks = [];
+        let selectedFloors = [];
+        let selectedRooms = [];
+        let explorerMetadata = { blocks: [], floors: [], rooms: [] };
+        let explorerChartInstance = null;
+
+        async function loadConsumptionExplorer(preserveControls = false) {
+            try {
+                let url = `/api/v1/analytics/consumption-breakdown?group_by=${currentConsumptionView}`;
+                if (selectedBlocks.length > 0) url += `&blocks=${encodeURIComponent(selectedBlocks.join(','))}`;
+                if (selectedFloors.length > 0) url += `&floors=${encodeURIComponent(selectedFloors.join(','))}`;
+                if (selectedRooms.length > 0) url += `&rooms=${encodeURIComponent(selectedRooms.join(','))}`;
+
+                const res = await fetch(url);
+                const data = await res.json();
+
+                explorerMetadata = data.available_metadata || { blocks: [], floors: [], rooms: [] };
+                if (!preserveControls || !document.getElementById('filterBlocksContainer') || document.getElementById('filterBlocksContainer').children.length === 0) {
+                    renderFilterControls();
+                }
+
+                // 1. Update KPI Cards
+                const sum = data.conjoined_summary || {};
+                const items = data.items || [];
+                
+                let scopeLabel = `${sum.total_rooms || 0} Rooms`;
+                if (currentConsumptionView === 'block') scopeLabel = `${items.length} Blocks (${sum.total_rooms || 0} Rooms)`;
+                else if (currentConsumptionView === 'floor') scopeLabel = `${items.length} Floors (${sum.total_rooms || 0} Rooms)`;
+                else if (currentConsumptionView === 'conjoined') scopeLabel = `Conjoined Cohort (${sum.total_rooms || 0} Rooms)`;
+
+                document.getElementById('exp-kpi-scope').innerText = scopeLabel;
+                document.getElementById('exp-kpi-scope-desc').innerText = `Active scope: ${currentConsumptionView.toUpperCase()}-WISE`;
+
+                document.getElementById('exp-kpi-water').innerText = (sum.total_water || 0).toLocaleString() + ' L';
+                document.getElementById('exp-kpi-water-avg').innerText = `Avg: ${(sum.avg_water_per_room || 0).toLocaleString()} L / room`;
+
+                document.getElementById('exp-kpi-elec').innerText = (sum.total_elec || 0).toLocaleString() + ' kWh';
+                document.getElementById('exp-kpi-elec-avg').innerText = `Avg: ${(sum.avg_elec_per_room || 0).toLocaleString()} kWh / room`;
+
+                const totalAlerts = (sum.total_leaks || 0) + (sum.total_peaks || 0);
+                document.getElementById('exp-kpi-alerts').innerText = totalAlerts + ' Alert' + (totalAlerts === 1 ? '' : 's');
+                document.getElementById('exp-kpi-alerts-desc').innerText = `${sum.total_leaks || 0} leak alerts · ${sum.total_peaks || 0} peak loads`;
+
+                // 2. Update Titles
+                const viewTitles = {
+                    'room': 'Room-wise Telemetry Breakdown',
+                    'floor': 'Floor-wise Aggregated Telemetry',
+                    'block': 'Block-wise Aggregated Telemetry',
+                    'conjoined': 'Conjoined Unified Cohort Total'
+                };
+                document.getElementById('expChartTitle').innerText = viewTitles[currentConsumptionView] || 'Consumption Telemetry Chart';
+                document.getElementById('expTableTitle').innerText = viewTitles[currentConsumptionView] || 'Itemized Consumption Breakdown';
+                document.getElementById('expTableBadge').innerText = `${items.length} ${currentConsumptionView === 'conjoined' ? 'Cohort' : 'Units'} Analyzed`;
+
+                // 3. Render Chart
+                const chartLabels = items.map(i => i.label || i.identifier);
+                const waterData = items.map(i => i.tot_water);
+                const elecData = items.map(i => i.tot_elec);
+
+                if (explorerChartInstance) {
+                    explorerChartInstance.destroy();
+                }
+
+                const canvas = document.getElementById('explorerChart');
+                if (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    explorerChartInstance = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: chartLabels,
+                            datasets: [
+                                {
+                                    label: 'Water Consumed (Liters)',
+                                    data: waterData,
+                                    backgroundColor: '#06b6d4',
+                                    borderRadius: 6,
+                                    yAxisID: 'y'
+                                },
+                                {
+                                    label: 'Electricity Consumed (kWh)',
+                                    data: elecData,
+                                    backgroundColor: '#f59e0b',
+                                    borderRadius: 6,
+                                    yAxisID: 'y1'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { labels: { color: '#94a3b8', font: { size: 11, weight: 'bold' } } },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const unit = context.datasetIndex === 0 ? ' L' : ' kWh';
+                                            return context.dataset.label + ': ' + context.parsed.y + unit;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: { color: '#94a3b8', font: { size: 10 } },
+                                    grid: { color: '#1e293b' }
+                                },
+                                y: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'left',
+                                    title: { display: true, text: 'Water (Liters)', color: '#06b6d4', font: { size: 10 } },
+                                    ticks: { color: '#06b6d4' },
+                                    grid: { color: '#1e293b' }
+                                },
+                                y1: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'right',
+                                    title: { display: true, text: 'Power (kWh)', color: '#f59e0b', font: { size: 10 } },
+                                    ticks: { color: '#f59e0b' },
+                                    grid: { drawOnChartArea: false }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // 4. Render Table Rows
+                let tableHtml = '';
+                items.forEach(row => {
+                    const hasLeak = (row.leak_count || 0) > 0;
+                    const hasPeak = (row.peak_count || 0) > 0;
+                    const statusBadge = hasLeak
+                        ? '<span class="px-2 py-0.5 rounded-full border border-rose-500/30 bg-rose-500/10 text-rose-400 text-[10px] font-bold">Leak Flagged</span>'
+                        : (hasPeak
+                            ? '<span class="px-2 py-0.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-400 text-[10px] font-bold">Peak Alert</span>'
+                            : '<span class="px-2 py-0.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">Optimal</span>');
+
+                    const blockDisplay = row.block || (Array.isArray(row.blocks) ? row.blocks.join(', ') : 'All Blocks');
+                    const floorDisplay = (row.floor !== undefined) ? `Floor ${row.floor}` : (Array.isArray(row.floors) ? `Floors: ${row.floors.join(', ')}` : (row.room_count ? `${row.room_count} Rooms` : 'All'));
+
+                    tableHtml += `
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="px-5 py-3 font-semibold text-white flex items-center space-x-2">
+                                <i class="fa-solid ${currentConsumptionView === 'block' ? 'fa-building text-indigo-400' : (currentConsumptionView === 'floor' ? 'fa-layer-group text-cyan-400' : (currentConsumptionView === 'conjoined' ? 'fa-link text-indigo-400' : 'fa-door-open text-slate-400'))} text-xs"></i>
+                                <span>${row.label || row.identifier}</span>
+                            </td>
+                            <td class="px-5 py-3 text-slate-300">${blockDisplay}</td>
+                            <td class="px-5 py-3 text-slate-300">${floorDisplay}</td>
+                            <td class="px-5 py-3 text-right font-mono font-bold text-cyan-400">${(row.tot_water || 0).toLocaleString()} L</td>
+                            <td class="px-5 py-3 text-right font-mono font-bold text-amber-400">${(row.tot_elec || 0).toLocaleString()} kWh</td>
+                            <td class="px-5 py-3 text-center">
+                                <span class="px-2 py-0.5 rounded ${hasLeak ? 'bg-rose-500/20 text-rose-400 font-bold' : 'text-slate-500'}">${row.leak_count || 0}</span>
+                            </td>
+                            <td class="px-5 py-3 text-center">
+                                <span class="px-2 py-0.5 rounded ${hasPeak ? 'bg-amber-500/20 text-amber-400 font-bold' : 'text-slate-500'}">${row.peak_count || 0}</span>
+                            </td>
+                            <td class="px-5 py-3 text-center">${statusBadge}</td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('explorerTableBody').innerHTML = tableHtml || '<tr><td colspan="8" class="px-5 py-6 text-center text-slate-400">No rooms match the selected filters.</td></tr>';
+
+                // 5. Render Conjoined Grand Total Footer
+                document.getElementById('explorerTableFooter').innerHTML = `
+                    <tr class="text-white border-t border-slate-700">
+                        <td class="px-5 py-3 text-indigo-300 font-bold flex items-center space-x-2">
+                            <i class="fa-solid fa-link text-indigo-400 text-xs"></i>
+                            <span>CONJOINED TOTAL (${sum.total_rooms || 0} Rooms)</span>
+                        </td>
+                        <td class="px-5 py-3 text-slate-400">${selectedBlocks.length > 0 ? selectedBlocks.join(', ') : 'All Blocks'}</td>
+                        <td class="px-5 py-3 text-slate-400">${selectedFloors.length > 0 ? 'Floors ' + selectedFloors.join(', ') : 'All Floors'}</td>
+                        <td class="px-5 py-3 text-right font-mono font-extrabold text-cyan-300 text-sm">${(sum.total_water || 0).toLocaleString()} L</td>
+                        <td class="px-5 py-3 text-right font-mono font-extrabold text-amber-300 text-sm">${(sum.total_elec || 0).toLocaleString()} kWh</td>
+                        <td class="px-5 py-3 text-center text-rose-300 font-bold">${sum.total_leaks || 0}</td>
+                        <td class="px-5 py-3 text-center text-amber-300 font-bold">${sum.total_peaks || 0}</td>
+                        <td class="px-5 py-3 text-center">
+                            <span class="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[10px] font-bold">Conjoined Cohort</span>
+                        </td>
+                    </tr>
+                `;
+
+            } catch (err) {
+                console.error("Error loading consumption explorer:", err);
+            }
+        }
+
+        function renderFilterControls() {
+            // 1. Blocks
+            let bHtml = '';
+            (explorerMetadata.blocks || []).forEach(b => {
+                const isChecked = selectedBlocks.length === 0 || selectedBlocks.includes(b);
+                bHtml += `
+                    <label class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer text-slate-300 select-none">
+                        <input type="checkbox" value="${b}" onchange="onBlockFilterChange()" ${isChecked ? 'checked' : ''} class="rounded bg-slate-950 border-slate-700 text-indigo-600 focus:ring-0">
+                        <span class="font-semibold text-xs">${b}</span>
+                    </label>
+                `;
+            });
+            const bCont = document.getElementById('filterBlocksContainer');
+            if (bCont) bCont.innerHTML = bHtml;
+
+            // 2. Floors
+            let fHtml = '';
+            (explorerMetadata.floors || []).forEach(f => {
+                const isChecked = selectedFloors.length === 0 || selectedFloors.includes(f);
+                fHtml += `
+                    <label class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer text-slate-300 select-none">
+                        <input type="checkbox" value="${f}" onchange="onFloorFilterChange()" ${isChecked ? 'checked' : ''} class="rounded bg-slate-950 border-slate-700 text-cyan-600 focus:ring-0">
+                        <span class="font-semibold text-xs">Floor ${f}</span>
+                    </label>
+                `;
+            });
+            const fCont = document.getElementById('filterFloorsContainer');
+            if (fCont) fCont.innerHTML = fHtml;
+
+            // 3. Rooms
+            let rHtml = '';
+            (explorerMetadata.rooms || []).forEach(r => {
+                const isChecked = selectedRooms.length === 0 || selectedRooms.includes(r.room_number);
+                rHtml += `
+                    <label class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer text-slate-300 text-[11px] select-none">
+                        <input type="checkbox" value="${r.room_number}" onchange="onRoomFilterChange()" ${isChecked ? 'checked' : ''} class="rounded bg-slate-950 border-slate-700 text-amber-600 focus:ring-0">
+                        <span>${r.room_number}</span>
+                    </label>
+                `;
+            });
+            const rCont = document.getElementById('filterRoomsContainer');
+            if (rCont) rCont.innerHTML = rHtml;
+        }
+
+        function setConsumptionView(view) {
+            currentConsumptionView = view;
+            ['room', 'floor', 'block', 'conjoined'].forEach(v => {
+                const btn = document.getElementById('btn-view-' + v);
+                if (btn) {
+                    if (v === view) {
+                        btn.className = "px-3 py-1.5 rounded-lg bg-indigo-600 text-white shadow transition";
+                    } else {
+                        btn.className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition";
+                    }
+                }
+            });
+            loadConsumptionExplorer(true);
+        }
+
+        function onBlockFilterChange() {
+            const inputs = document.querySelectorAll('#filterBlocksContainer input');
+            const checked = Array.from(inputs).filter(el => el.checked).map(el => el.value);
+            selectedBlocks = (checked.length === inputs.length) ? [] : checked;
+            loadConsumptionExplorer(true);
+        }
+
+        function onFloorFilterChange() {
+            const inputs = document.querySelectorAll('#filterFloorsContainer input');
+            const checked = Array.from(inputs).filter(el => el.checked).map(el => parseInt(el.value));
+            selectedFloors = (checked.length === inputs.length) ? [] : checked;
+            loadConsumptionExplorer(true);
+        }
+
+        function onRoomFilterChange() {
+            const inputs = document.querySelectorAll('#filterRoomsContainer input');
+            const checked = Array.from(inputs).filter(el => el.checked).map(el => el.value);
+            selectedRooms = (checked.length === inputs.length) ? [] : checked;
+            loadConsumptionExplorer(true);
+        }
+
+        function applyPreset(preset) {
+            if (preset === 'all') {
+                selectedBlocks = [];
+                selectedFloors = [];
+                selectedRooms = [];
+                setConsumptionView('conjoined');
+            } else if (preset === 'blockA_vs_B') {
+                selectedBlocks = ['Block-A', 'Block-B'];
+                selectedFloors = [];
+                selectedRooms = [];
+                setConsumptionView('block');
+            } else if (preset === 'floors_1_2') {
+                selectedBlocks = [];
+                selectedFloors = [1, 2];
+                selectedRooms = [];
+                setConsumptionView('floor');
+            } else if (preset === 'rooms_heavy') {
+                selectedBlocks = [];
+                selectedFloors = [];
+                selectedRooms = ['A-101', 'B-101'];
+                setConsumptionView('room');
+            }
+            renderFilterControls();
+        }
+
+        function resetConsumptionFilters() {
+            selectedBlocks = [];
+            selectedFloors = [];
+            selectedRooms = [];
+            setConsumptionView('room');
+            renderFilterControls();
+        }
+
+        function toggleAllFilter(type) {
+            if (type === 'blocks') {
+                const inputs = document.querySelectorAll('#filterBlocksContainer input');
+                const anyUnchecked = Array.from(inputs).some(i => !i.checked);
+                inputs.forEach(i => i.checked = anyUnchecked);
+                onBlockFilterChange();
+            } else if (type === 'floors') {
+                const inputs = document.querySelectorAll('#filterFloorsContainer input');
+                const anyUnchecked = Array.from(inputs).some(i => !i.checked);
+                inputs.forEach(i => i.checked = anyUnchecked);
+                onFloorFilterChange();
+            } else if (type === 'rooms') {
+                const inputs = document.querySelectorAll('#filterRoomsContainer input');
+                const anyUnchecked = Array.from(inputs).some(i => !i.checked);
+                inputs.forEach(i => i.checked = anyUnchecked);
+                onRoomFilterChange();
+            }
+        }
+
+        window.onload = function() {
+            loadAllData();
+            loadConsumptionExplorer(false);
+        };
     </script>
 </body>
 </html>
