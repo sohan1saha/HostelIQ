@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from typing import Optional
 
 class StudentBase(BaseModel):
@@ -12,6 +12,9 @@ class StudentBase(BaseModel):
 class StudentCreate(StudentBase):
     pass
 
+class StudentTransferRequest(BaseModel):
+    student_id: str = Field(..., description="Student ID to reallocate")
+    target_room_id: int = Field(..., description="Destination Room ID")
+
 class StudentResponse(StudentBase):
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

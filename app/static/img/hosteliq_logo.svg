@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Vibrant Cerulean & Neon Gradients -->
+    <linearGradient id="ceruleanGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="50%" stop-color="#00A3E0" />
+      <stop offset="100%" stop-color="#007BA7" />
+    </linearGradient>
+
+    <linearGradient id="windowGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#60D5FF" />
+      <stop offset="100%" stop-color="#007BA7" />
+    </linearGradient>
+
+    <linearGradient id="iqGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="60%" stop-color="#0088CC" />
+      <stop offset="100%" stop-color="#006699" />
+    </linearGradient>
+
+    <linearGradient id="neonAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF2A6D" />
+      <stop offset="100%" stop-color="#FF7597" />
+    </linearGradient>
+
+    <!-- Outer Soft Glow Filter -->
+    <filter id="blueOuterGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="intenseGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="12" result="blur1" />
+      <feGaussianBlur stdDeviation="4" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Group for Logo Emblem ('Hi') -->
+  <g transform="translate(130, 25)">
+    <!-- Ambient Behind Glow -->
+    <circle cx="215" cy="55" r="45" fill="#00A3E0" opacity="0.35" filter="url(#intenseGlow)" />
+    <circle cx="140" cy="140" r="40" fill="#007BA7" opacity="0.4" filter="url(#intenseGlow)" />
+    <circle cx="230" cy="130" r="50" fill="#0088CC" opacity="0.35" filter="url(#intenseGlow)" />
+
+    <!-- 1. The White 'H' Structure with Gabled Roof Crossbar -->
+    <!-- Solid clean white geometry with smooth rounded caps -->
+    <path d="
+      M 75 35
+      C 63 35 55 43 55 55
+      L 55 190
+      C 55 202 63 210 75 210
+      C 87 210 95 202 95 190
+      L 95 142
+      L 140 108
+      L 185 142
+      L 185 190
+      C 185 202 193 210 205 210
+      C 217 210 225 202 225 190
+      L 225 55
+      C 225 43 217 35 205 35
+      C 193 35 185 43 185 55
+      L 185 88
+      L 140 55
+      L 95 88
+      L 95 55
+      C 95 43 87 35 75 35 Z
+    " fill="#FFFFFF" filter="drop-shadow(0 4px 16px rgba(0, 163, 224, 0.45))" />
+
+    <!-- 2. Four Window Panes (2x2 Grid) inside House Opening -->
+    <g transform="translate(118, 126)" filter="url(#blueOuterGlow)">
+      <rect x="0" y="0" width="19" height="19" rx="4" fill="url(#windowGlow)" stroke="#60D5FF" stroke-width="1.2" />
+      <rect x="25" y="0" width="19" height="19" rx="4" fill="url(#windowGlow)" stroke="#60D5FF" stroke-width="1.2" />
+      <rect x="0" y="24" width="19" height="19" rx="4" fill="url(#windowGlow)" stroke="#60D5FF" stroke-width="1.2" />
+      <rect x="25" y="24" width="19" height="19" rx="4" fill="url(#windowGlow)" stroke="#60D5FF" stroke-width="1.2" />
+    </g>
+
+    <!-- 3. The 'i' Element: Resident Silhouette / Glowing Tie -->
+    <!-- Head / Circular Dot with 3D Depth & Glow -->
+    <g filter="url(#intenseGlow)">
+      <circle cx="252" cy="40" r="28" fill="url(#ceruleanGlow)" stroke="#A5F3FC" stroke-width="1.8" />
+      <!-- Subtle internal highlight -->
+      <circle cx="244" cy="32" r="10" fill="#FFFFFF" opacity="0.45" />
+    </g>
+
+    <!-- Stem / Geometric Tie with Beveled Corner -->
+    <path d="
+      M 234 82
+      C 230 82 228 85 228 90
+      L 228 175
+      C 228 178 230 182 233 185
+      L 264 216
+      C 268 220 273 219 275 215
+      L 294 186
+      C 297 181 298 178 298 174
+      L 298 90
+      C 298 85 295 82 291 82
+      Z
+    " fill="url(#ceruleanGlow)" stroke="#7DD3FC" stroke-width="1.8" filter="url(#blueOuterGlow)" />
+  </g>
+
+  <!-- Group for Wordmark: 'hostelIQ' -->
+  <g transform="translate(300, 325)" text-anchor="middle">
+    <!-- 'hostel' in crisp white Plus Jakarta Sans / geometric bold -->
+    <text x="-55" y="0" font-family="'Plus Jakarta Sans', 'Lato', sans-serif" font-weight="900" font-size="78" fill="#FFFFFF" letter-spacing="-0.03em" filter="drop-shadow(0 2px 10px rgba(0,0,0,0.5))">hostel</text>
+
+    <!-- 'IQ' in electric glowing Cerulean Blue with subtle Neon Rose edge accent -->
+    <!-- Glowing background pass -->
+    <text x="122" y="0" font-family="'Plus Jakarta Sans', 'Lato', sans-serif" font-weight="900" font-size="78" fill="#38BDF8" letter-spacing="-0.03em" opacity="0.6" filter="url(#blueOuterGlow)">IQ</text>
+    <!-- Crisp foreground pass -->
+    <text x="122" y="0" font-family="'Plus Jakarta Sans', 'Lato', sans-serif" font-weight="900" font-size="78" fill="url(#iqGlow)" stroke="#38BDF8" stroke-width="1.5" letter-spacing="-0.03em">IQ</text>
+  </g>
+</svg>

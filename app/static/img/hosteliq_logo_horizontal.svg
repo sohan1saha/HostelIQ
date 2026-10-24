@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 64" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Vibrant Cerulean & Neon Gradients -->
+    <linearGradient id="hCeruleanGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="60%" stop-color="#0099DD" />
+      <stop offset="100%" stop-color="#007BA7" />
+    </linearGradient>
+
+    <linearGradient id="hWindowGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7DD3FC" />
+      <stop offset="100%" stop-color="#007BA7" />
+    </linearGradient>
+
+    <!-- Outer Soft Glow Filter -->
+    <filter id="hBlueGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 1. Emblem Lockup on Left -->
+  <g transform="translate(6, 8)">
+    <!-- Ambient Behind Glow -->
+    <circle cx="34" cy="10" r="14" fill="#00A3E0" opacity="0.35" filter="url(#hBlueGlow)" />
+    <circle cx="38" cy="28" r="14" fill="#007BA7" opacity="0.35" filter="url(#hBlueGlow)" />
+
+    <!-- White 'H' with house arch -->
+    <path d="
+      M 11 5
+      C 8 5 6 7 6 10
+      L 6 39
+      C 6 42 8 44 11 44
+      C 14 44 16 42 16 39
+      L 16 29
+      L 24 23
+      L 32 29
+      L 32 39
+      C 32 42 34 44 37 44
+      C 40 44 42 42 42 39
+      L 42 10
+      C 42 7 40 5 37 5
+      C 34 5 32 7 32 10
+      L 32 17
+      L 24 11
+      L 16 17
+      L 16 10
+      C 16 7 14 5 11 5 Z
+    " fill="#FFFFFF" filter="drop-shadow(0 2px 6px rgba(0, 163, 224, 0.45))" />
+
+    <!-- Four Window Panes (2x2 Grid) -->
+    <g transform="translate(20, 26)" filter="url(#hBlueGlow)">
+      <rect x="0" y="0" width="3.5" height="3.5" rx="0.8" fill="url(#hWindowGlow)" stroke="#7DD3FC" stroke-width="0.5" />
+      <rect x="4.5" y="0" width="3.5" height="3.5" rx="0.8" fill="url(#hWindowGlow)" stroke="#7DD3FC" stroke-width="0.5" />
+      <rect x="0" y="4.5" width="3.5" height="3.5" rx="0.8" fill="url(#hWindowGlow)" stroke="#7DD3FC" stroke-width="0.5" />
+      <rect x="4.5" y="4.5" width="3.5" height="3.5" rx="0.8" fill="url(#hWindowGlow)" stroke="#7DD3FC" stroke-width="0.5" />
+    </g>
+
+    <!-- 'i' Dot: Resident Head -->
+    <g filter="url(#hBlueGlow)">
+      <circle cx="47" cy="8" r="5.5" fill="url(#hCeruleanGlow)" stroke="#BAE6FD" stroke-width="0.6" />
+      <circle cx="45.5" cy="6.5" r="2" fill="#FFFFFF" opacity="0.6" />
+    </g>
+
+    <!-- 'i' Stem: Resident / Tie -->
+    <path d="
+      M 43.5 17
+      C 42.5 17 42 17.5 42 18.5
+      L 42 36
+      C 42 36.5 42.5 37.5 43 38
+      L 47.5 43
+      C 48.5 44 49.5 44 50 43
+      L 53.5 38.5
+      C 54 38 54.5 37 54.5 36
+      L 54.5 18.5
+      C 54.5 17.5 54 17 53 17
+      Z
+    " fill="url(#hCeruleanGlow)" stroke="#7DD3FC" stroke-width="0.6" filter="url(#hBlueGlow)" />
+  </g>
+
+  <!-- 2. Typography Lockup on Right (Bold, Clean & Vertically Centered) -->
+  <g transform="translate(68, 41)">
+    <!-- 'hostel' in crisp white Plus Jakarta Sans bold -->
+    <text x="0" y="0" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="28" fill="#FFFFFF" letter-spacing="-0.03em" filter="drop-shadow(0 2px 8px rgba(0,0,0,0.5))">hostel</text>
+
+    <!-- 'IQ' in electric glowing Cerulean Blue -->
+    <text x="85" y="0" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="28" fill="url(#hCeruleanGlow)" stroke="#38BDF8" stroke-width="0.8" letter-spacing="-0.03em" filter="url(#hBlueGlow)">IQ</text>
+  </g>
+</svg>

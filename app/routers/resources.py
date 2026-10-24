@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel, Field
 from typing import Optional
-from app.models.resource import WaterLogCreate, ElectricityLogCreate
-from app.models.student import StudentCreate
+from app.models.resource import WaterLogCreate, ElectricityLogCreate, TelemetrySimulationRequest
+from app.models.student import StudentCreate, StudentTransferRequest
 from app.database.sql_manager import sql_manager
 
 router = APIRouter(prefix="/api/v1/resources", tags=["Resource & Data Management"])
@@ -31,15 +31,38 @@ def create_student(payload: StudentCreate):
         )
         return {
             "status": "success",
-            "message": "Student registered successfully",
-            "student_id": payload.student_id
+            "message": "Student registered and allocated to room successfully",
+            "student_id": payload.student_id,
+            "allocated_room_id": room_id
         }
     except ValueError as ve:
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to register student: {str(e)}")
 
-@router.post("/room", status_code=status.HTTP_201_CREATED, summary="Add Room Inventory")
+@router.post("/students/transfer", summary="Reallocate Student to New Room")
+def transfer_student(payload: StudentTransferRequest):
+    """
+    Room Transfer & Reallocation Wizard:
+    Moves a student from their current room to a target room,
+    strictly verifying target room capacity (< 3 beds occupied).
+    """
+    try:
+        result = sql_manager.transfer_student(
+            student_id=payload.student_id,
+            new_room_id=payload.target_room_id
+        )
+        return {
+            "status": "success",
+            "message": f"Successfully transferred student {result['student_name']} ({result['student_id']}) to Room {result['new_room']}",
+            "data": result
+        }
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Transfer failed: {str(e)}")
+
+@router.post("/room", status_code=status.HTTP_201_CREATED, summary="Create Hostel Room")
 def create_room(payload: RoomCreate):
     try:
         room_id = sql_manager.add_room(
@@ -50,13 +73,13 @@ def create_room(payload: RoomCreate):
         )
         return {
             "status": "success",
-            "message": "Room added successfully",
+            "message": "Hostel room provisioned successfully",
             "room_id": room_id
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to add room: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to create room: {str(e)}")
 
-@router.post("/water-log", status_code=status.HTTP_201_CREATED, summary="Log Water Consumption")
+@router.post("/water-log", status_code=status.HTTP_201_CREATED, summary="Ingest Water Usage Log")
 def log_water_consumption(payload: WaterLogCreate):
     try:
         log_id = sql_manager.add_water_log(
@@ -67,13 +90,13 @@ def log_water_consumption(payload: WaterLogCreate):
         )
         return {
             "status": "success",
-            "message": "Water consumption logged successfully",
+            "message": "Water telemetry reading recorded",
             "log_id": log_id
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to log water consumption: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to record water telemetry: {str(e)}")
 
-@router.post("/electricity-log", status_code=status.HTTP_201_CREATED, summary="Log Electricity Usage")
+@router.post("/electricity-log", status_code=status.HTTP_201_CREATED, summary="Ingest Electricity Usage Log")
 def log_electricity_consumption(payload: ElectricityLogCreate):
     try:
         log_id = sql_manager.add_electricity_log(
@@ -84,8 +107,69 @@ def log_electricity_consumption(payload: ElectricityLogCreate):
         )
         return {
             "status": "success",
-            "message": "Electricity consumption logged successfully",
+            "message": "Electricity telemetry reading recorded",
             "log_id": log_id
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to log electricity usage: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to record electricity telemetry: {str(e)}")
+
+@router.get("/occupancy", summary="Hostel Occupancy & Capacity Metrics")
+@router.get("/occupancy-stats", summary="Hostel Occupancy & Capacity Metrics Alias")
+def get_occupancy_stats():
+    try:
+        return sql_manager.get_occupancy_stats()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch occupancy stats: {str(e)}")
+
+@router.get("/rooms", summary="List All Hostel Rooms")
+def get_rooms():
+    try:
+        data = sql_manager.get_all_rooms()
+        return {"data": data, "count": len(data)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch rooms: {str(e)}")
+
+@router.get("/students", summary="List All Registered Students")
+def get_students():
+    try:
+        data = sql_manager.get_all_students()
+        return {"data": data, "count": len(data)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch students: {str(e)}")
+
+@router.get("/daywise-logs", summary="Get Day-wise Utility Telemetry Across All Rooms")
+def get_daywise_logs(
+    limit: int = 100,
+    offset: int = 0,
+    block: Optional[str] = None,
+    floor: Optional[int] = None,
+    room: Optional[str] = None,
+    log_date: Optional[str] = None,
+    anomaly_only: bool = False
+):
+    try:
+        return sql_manager.get_daywise_telemetry_logs(
+            limit=limit,
+            offset=offset,
+            block=block,
+            floor=floor,
+            room_number=room,
+            log_date=log_date,
+            anomaly_only=anomaly_only
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch day-wise telemetry logs: {str(e)}")
+
+@router.post("/simulate-telemetry", status_code=status.HTTP_201_CREATED, summary="Simulate IoT Sensor Telemetry")
+def simulate_telemetry(payload: Optional[TelemetrySimulationRequest] = None):
+    try:
+        target_date_str = str(payload.target_date) if payload and payload.target_date else None
+        rate = payload.anomaly_rate if payload and payload.anomaly_rate is not None else 0.08
+        result = sql_manager.simulate_telemetry_batch(target_date=target_date_str, anomaly_rate=rate)
+        if result.get("status") == "error":
+            raise HTTPException(status_code=400, detail=result.get("message"))
+        return result
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to simulate telemetry: {str(e)}")

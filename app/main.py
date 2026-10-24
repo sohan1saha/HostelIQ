@@ -14,19 +14,23 @@ app = FastAPI(
     ## HostelIQ: Smart Hostel Resource & Complaint Analytics System
     Developed for Database Concepts for Data Science (DCDS) Lab ESE Project.
     
-    ### 🎯 SDG Alignments:
+    ### SDG Alignments:
     * **SDG 6 (Clean Water and Sanitation)**: Water flow telemetry, leakage flagging, plumbing grievance tracking.
     * **SDG 12 (Responsible Consumption & Production)**: Electricity usage monitoring, carbon offset metrics, peak hour alerts.
 
-    ### ⚡ Database Architecture:
+    ### Database Architecture:
     * **Relational (SQL)**: Students, Rooms, Water Logs, Electricity Logs (Multi-Table Joins, Subqueries, Aggregations, Stored Procedures).
     * **Non-Relational (NoSQL)**: MongoDB Complaints Collection ($match, $group, $sort, $unwind aggregation pipelines).
     """
 )
 
-# Setup Templates
+# Setup Templates & Static Files
 templates_dir = os.path.join(os.path.dirname(__file__), "templates")
 templates = Jinja2Templates(directory=templates_dir)
+
+static_dir = os.path.join(os.path.dirname(__file__), "static")
+if os.path.exists(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 # Include API Routers
 app.include_router(analytics.router)

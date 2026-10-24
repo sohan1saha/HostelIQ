@@ -1,0 +1,33 @@
+[
+  {
+    "student_id": "STU_DISPATCH",
+    "room_number": "A-102",
+    "category": "Plumbing Issue",
+    "sdg_target": "SDG 6",
+    "description": "Sink tap leaking",
+    "priority": "High",
+    "complaint_id": "CMP1001",
+    "status": "Resolved",
+    "timeline": [
+      {
+        "status": "Submitted",
+        "timestamp": "2026-10-24T22:10:32.955580+00:00"
+      },
+      {
+        "status": "Resolved",
+        "timestamp": "2026-10-24T22:10:32.982906+00:00"
+      }
+    ],
+    "assigned_staff_id": 101,
+    "assigned_staff_name": "Rajesh Kumar",
+    "assigned_staff_phone": "+919876543210",
+    "assigned_staff_trade": "Plumbing (SDG 6)",
+    "sla_deadline_hours": 4,
+    "sla_target_time": "2026-10-25T02:10:32.956812+00:00",
+    "sla_status": "Within SLA",
+    "feedback": {
+      "rating": 5,
+      "comments": "Fixed"
+    }
+  }
+]
