@@ -1,11 +1,13 @@
 import os
 
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 class Settings:
     PROJECT_NAME: str = "HostelIQ: Smart Hostel Resource & Complaint Analytics System"
     VERSION: str = "1.0.0"
     
-    # SQL Database Configuration (Supports SQLite local file & MySQL connection)
-    SQL_DB_FILE: str = os.getenv("SQL_DB_FILE", "hosteliq.db")
+    # SQL Database Configuration (Absolute path to project root hosteliq.db)
+    SQL_DB_FILE: str = os.getenv("SQL_DB_FILE", os.path.join(ROOT_DIR, "hosteliq.db"))
     SQL_DATABASE_URL: str = os.getenv("SQL_DATABASE_URL", f"sqlite:///{SQL_DB_FILE}")
     
     # MongoDB Configuration (Supports local MongoDB or fallback mock database)
