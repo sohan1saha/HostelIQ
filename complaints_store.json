@@ -1,33 +1,202 @@
 [
   {
-    "student_id": "STU_DISPATCH",
-    "room_number": "A-102",
-    "category": "Plumbing Issue",
-    "sdg_target": "SDG 6",
-    "description": "Sink tap leaking",
-    "priority": "High",
+    "student_id": "STU20251552",
+    "student_name": "Vedika Handa",
+    "room_number": "I-408",
+    "category": "Carpentry",
+    "sdg_target": "SDG 11",
+    "description": "Wardrobe hinge loose and door misaligned",
+    "priority": "Low",
+    "created_at": "2026-10-25",
     "complaint_id": "CMP1001",
-    "status": "Resolved",
+    "status": "Submitted",
     "timeline": [
       {
         "status": "Submitted",
-        "timestamp": "2026-10-24T22:10:32.955580+00:00"
-      },
+        "timestamp": "2026-10-25T09:22:09.927760+00:00"
+      }
+    ],
+    "assigned_staff_id": 103,
+    "assigned_staff_name": "Amit Shinde",
+    "assigned_staff_phone": "+919876543212",
+    "assigned_staff_trade": "Sanitation",
+    "sla_deadline_hours": 24,
+    "sla_target_time": "2026-10-26T09:22:09.933081+00:00",
+    "sla_status": "Within SLA"
+  },
+  {
+    "student_id": "STU20250491",
+    "student_name": "Lila Prakash",
+    "room_number": "C-504",
+    "category": "Low Pressure",
+    "sdg_target": "SDG 6",
+    "description": "Water supply pressure low in washbasin",
+    "priority": "Medium",
+    "created_at": "2026-10-25",
+    "complaint_id": "CMP1002",
+    "status": "Submitted",
+    "timeline": [
       {
-        "status": "Resolved",
-        "timestamp": "2026-10-24T22:10:32.982906+00:00"
+        "status": "Submitted",
+        "timestamp": "2026-10-25T09:22:09.961138+00:00"
       }
     ],
     "assigned_staff_id": 101,
     "assigned_staff_name": "Rajesh Kumar",
     "assigned_staff_phone": "+919876543210",
     "assigned_staff_trade": "Plumbing (SDG 6)",
+    "sla_deadline_hours": 12,
+    "sla_target_time": "2026-10-25T21:22:09.966096+00:00",
+    "sla_status": "Within SLA"
+  },
+  {
+    "student_id": "STU20251276",
+    "student_name": "Reyansh Nagi",
+    "room_number": "H-106",
+    "category": "Carpentry",
+    "sdg_target": "SDG 11",
+    "description": "Wardrobe hinge loose and door misaligned",
+    "priority": "Low",
+    "created_at": "2026-10-25",
+    "complaint_id": "CMP1003",
+    "status": "Submitted",
+    "timeline": [
+      {
+        "status": "Submitted",
+        "timestamp": "2026-10-25T09:22:09.994449+00:00"
+      }
+    ],
+    "assigned_staff_id": 103,
+    "assigned_staff_name": "Amit Shinde",
+    "assigned_staff_phone": "+919876543212",
+    "assigned_staff_trade": "Sanitation",
+    "sla_deadline_hours": 24,
+    "sla_target_time": "2026-10-26T09:22:10.000704+00:00",
+    "sla_status": "Within SLA"
+  },
+  {
+    "student_id": "STU20251671",
+    "student_name": "Chaitaly Bhagat",
+    "room_number": "J-207",
+    "category": "Electrical Spark",
+    "sdg_target": "SDG 12",
+    "description": "Study lamp socket switch sparking occasionally",
+    "priority": "High",
+    "created_at": "2026-10-25",
+    "complaint_id": "CMP1004",
+    "status": "Submitted",
+    "timeline": [
+      {
+        "status": "Submitted",
+        "timestamp": "2026-10-25T09:22:10.036746+00:00"
+      }
+    ],
+    "assigned_staff_id": 102,
+    "assigned_staff_name": "Suresh Yadav",
+    "assigned_staff_phone": "+919876543211",
+    "assigned_staff_trade": "Electrical (SDG 12)",
     "sla_deadline_hours": 4,
-    "sla_target_time": "2026-10-25T02:10:32.956812+00:00",
-    "sla_status": "Within SLA",
-    "feedback": {
-      "rating": 5,
-      "comments": "Fixed"
-    }
+    "sla_target_time": "2026-10-25T13:22:10.042933+00:00",
+    "sla_status": "Within SLA"
+  },
+  {
+    "student_id": "STU20251648",
+    "student_name": "Anusha Doshi",
+    "room_number": "J-110",
+    "category": "Lighting",
+    "sdg_target": "SDG 12",
+    "description": "Tube light flickering continuously in study area",
+    "priority": "Low",
+    "created_at": "2026-10-25",
+    "complaint_id": "CMP1005",
+    "status": "Submitted",
+    "timeline": [
+      {
+        "status": "Submitted",
+        "timestamp": "2026-10-25T09:22:10.065776+00:00"
+      }
+    ],
+    "assigned_staff_id": 105,
+    "assigned_staff_name": "Vikas Patil",
+    "assigned_staff_phone": "+919876543214",
+    "assigned_staff_trade": "Electrical (SDG 12)",
+    "sla_deadline_hours": 24,
+    "sla_target_time": "2026-10-26T09:22:10.068958+00:00",
+    "sla_status": "Within SLA"
+  },
+  {
+    "student_id": "STU20251240",
+    "student_name": "Pahal Arya",
+    "room_number": "G-604",
+    "category": "Carpentry",
+    "sdg_target": "SDG 11",
+    "description": "Wardrobe hinge loose and door misaligned",
+    "priority": "Low",
+    "created_at": "2026-10-25",
+    "complaint_id": "CMP1006",
+    "status": "Submitted",
+    "timeline": [
+      {
+        "status": "Submitted",
+        "timestamp": "2026-10-25T09:22:10.087816+00:00"
+      }
+    ],
+    "assigned_staff_id": 103,
+    "assigned_staff_name": "Amit Shinde",
+    "assigned_staff_phone": "+919876543212",
+    "assigned_staff_trade": "Sanitation",
+    "sla_deadline_hours": 24,
+    "sla_target_time": "2026-10-26T09:22:10.090599+00:00",
+    "sla_status": "Within SLA"
+  },
+  {
+    "student_id": "STU20250285",
+    "student_name": "Eesha Solanki",
+    "room_number": "B-405",
+    "category": "Water Leakage",
+    "sdg_target": "SDG 6",
+    "description": "Continuous tap leakage in bathroom causing water loss",
+    "priority": "High",
+    "created_at": "2026-10-25",
+    "complaint_id": "CMP1007",
+    "status": "Submitted",
+    "timeline": [
+      {
+        "status": "Submitted",
+        "timestamp": "2026-10-25T09:22:10.111382+00:00"
+      }
+    ],
+    "assigned_staff_id": 104,
+    "assigned_staff_name": "Manoj Verma",
+    "assigned_staff_phone": "+919876543213",
+    "assigned_staff_trade": "Plumbing (SDG 6)",
+    "sla_deadline_hours": 4,
+    "sla_target_time": "2026-10-25T13:22:10.114533+00:00",
+    "sla_status": "Within SLA"
+  },
+  {
+    "student_id": "STU20251074",
+    "student_name": "Hemangini Roy",
+    "room_number": "F-608",
+    "category": "Pest Control",
+    "sdg_target": "SDG 11",
+    "description": "Window mesh torn allowing mosquitoes inside",
+    "priority": "Medium",
+    "created_at": "2026-10-25",
+    "complaint_id": "CMP1008",
+    "status": "Submitted",
+    "timeline": [
+      {
+        "status": "Submitted",
+        "timestamp": "2026-10-25T09:22:10.133482+00:00"
+      }
+    ],
+    "assigned_staff_id": 103,
+    "assigned_staff_name": "Amit Shinde",
+    "assigned_staff_phone": "+919876543212",
+    "assigned_staff_trade": "Sanitation",
+    "sla_deadline_hours": 12,
+    "sla_target_time": "2026-10-25T21:22:10.136099+00:00",
+    "sla_status": "Within SLA"
   }
 ]

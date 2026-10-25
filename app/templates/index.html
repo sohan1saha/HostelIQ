@@ -338,6 +338,9 @@
                 <button onclick="switchTab('students')" id="nav-students" class="w-full text-left px-4 py-2.5 rounded-xl text-[#E2E8F0] hover:text-[#FFFFFF] hover:bg-[#0F1E33] transition font-semibold">
                     <span>Residents Directory</span>
                 </button>
+                <button onclick="switchTab('simulations')" id="nav-simulations" class="w-full text-left px-4 py-2.5 rounded-xl text-[#E2E8F0] hover:text-[#FFFFFF] hover:bg-[#0F1E33] transition font-semibold">
+                    <span>Simulation Studio</span>
+                </button>
             </nav>
         </div>
 
@@ -373,10 +376,6 @@
                 </button>
                 <button onclick="openModal('utilityModal')" class="bg-[#0C2340] hover:bg-[#13355F] text-[#38BDF8] border border-[#1E3A5F] px-4 py-2 rounded-xl text-xs font-bold transition shadow-sm">
                     <span>Log Meter</span>
-                </button>
-                <button id="btnSyncSensors" onclick="triggerSensorSimulation()" class="bg-[#052825] hover:bg-[#073D39] text-[#10B981] border border-[#0D5C52] px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center space-x-1.5" title="Simulate automated IoT smart meter telemetry ingestion">
-                    <span id="syncSensorPulse" class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
-                    <span id="syncSensorText">Auto-Sync Sensors</span>
                 </button>
                 <div class="h-4 w-px bg-slate-800 mx-1"></div>
                 <div class="relative">
@@ -527,7 +526,6 @@
                 </div>
             </div>
 
-            <!-- SECTION 2: ROOMS & ALLOCATION -->
             <div id="tab-rooms" class="space-y-6 hidden">
                 <div class="flex items-center justify-between">
                     <div>
@@ -569,10 +567,6 @@
                         <p class="text-xs text-[#52637A] mt-0.5">Sustainably analyze, compare, and conjoin water & electricity usage room-wise, floor-wise, block-wise, or custom cohorts</p>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <button onclick="triggerSensorSimulation()" class="bg-[#052825] hover:bg-[#073D39] text-[#10B981] border border-[#0D5C52] px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center space-x-1.5" title="Simulate automated IoT smart meter telemetry ingestion">
-                            <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
-                            <span>Simulate IoT Telemetry</span>
-                        </button>
                         <button onclick="openModal('utilityModal')" class="bg-[#FF2A6D] hover:bg-[#E01E5A] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg shadow-[#FF2A6D]/25 transition">Log Meter Reading</button>
                     </div>
                 </div>
@@ -800,10 +794,6 @@
                         <button onclick="openPrintAuditSummary()" class="px-3 py-2 bg-[#12141C] hover:bg-[#181C26] text-white border border-[#1E2433] font-bold rounded-xl text-xs transition flex items-center space-x-1.5 shadow-sm" title="Printable executive audit summary">
                             <span>Print / Audit Summary</span>
                         </button>
-                        <button onclick="triggerSensorSimulation()" class="bg-[#052825] hover:bg-[#073D39] text-[#10B981] border border-[#0D5C52] px-3 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center space-x-1.5" title="Simulate automated IoT smart meter telemetry ingestion">
-                            <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
-                            <span>Auto-Sync Sensors</span>
-                        </button>
                         <button onclick="loadDaywiseDirectory()" class="bg-[#0C2340] hover:bg-[#13355F] text-[#38BDF8] border border-[#1E3A5F] px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm">
                             <span>Refresh</span>
                         </button>
@@ -940,10 +930,6 @@
                         <a href="/api/v1/analytics/export/grievances" class="px-3.5 py-1.5 bg-[#007BA7] hover:bg-[#0284C7] text-white font-bold rounded-xl text-xs transition flex items-center space-x-1.5 shadow-sm" title="Export grievance log to CSV">
                             <span>Export CSV</span>
                         </a>
-                        <button onclick="triggerTicketSimulation()" id="btn-simulate-tickets" class="bg-[#052825] hover:bg-[#073D39] text-[#10B981] border border-[#0D5C52] px-3.5 py-1.5 rounded-xl text-xs font-bold transition shadow-sm flex items-center space-x-1.5" title="Simulate stochastic Poisson maintenance grievances">
-                            <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
-                            <span>Simulate Daily Grievances</span>
-                        </button>
                         <button onclick="openModal('complaintModal')" class="bg-[#FF2A6D] hover:bg-[#E01E5A] text-white px-3.5 py-1.5 rounded-xl text-xs font-bold shadow-lg shadow-[#FF2A6D]/25 transition flex items-center space-x-1.5">
                             + Raise New Ticket
                         </button>
@@ -1169,7 +1155,7 @@
                             <span class="text-[#FF2A6D]">Pink: Power (kWh)</span>
                         </div>
                     </div>
-                    <div class="relative w-full h-72">
+                    <div id="forecastChartContainer" class="relative w-full h-72">
                         <canvas id="forecastChart"></canvas>
                     </div>
                 </div>
@@ -1203,6 +1189,102 @@
                     </div>
                 </div>
             </div>
+            <!-- SECTION: SIMULATION STUDIO (COMPACT & SIMPLE) -->
+            <div id="tab-simulations" class="space-y-4 hidden">
+                <div class="flex items-center justify-between border-b border-[#1E2433] pb-3">
+                    <h2 class="text-base font-bold text-white">Simulation Studio</h2>
+                    <button onclick="loadSimulationStats()" class="bg-[#12141C] hover:bg-[#181C26] text-white border border-[#1E2433] px-3 py-1.5 rounded-xl text-xs font-semibold transition">
+                        Refresh
+                    </button>
+                </div>
+
+                <!-- Simple Stats Strip -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-3.5">
+                        <span class="text-[10px] font-semibold text-[#94A3B8] uppercase">Capacity</span>
+                        <h4 class="text-base font-bold text-white mt-0.5" id="sim-kpi-capacity">0 Rooms / 0 Beds</h4>
+                    </div>
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-3.5">
+                        <span class="text-[10px] font-semibold text-[#38BDF8] uppercase">Occupancy</span>
+                        <h4 class="text-base font-bold text-[#38BDF8] mt-0.5" id="sim-kpi-occupancy">0 / 0 Beds (0%)</h4>
+                    </div>
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-3.5">
+                        <span class="text-[10px] font-semibold text-[#10B981] uppercase">Telemetry</span>
+                        <h4 class="text-base font-bold text-[#10B981] mt-0.5" id="sim-kpi-telemetry">0 Records</h4>
+                    </div>
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-3.5">
+                        <span class="text-[10px] font-semibold text-[#FF2A6D] uppercase">Grievances</span>
+                        <h4 class="text-base font-bold text-[#FF2A6D] mt-0.5" id="sim-kpi-tickets">0 Open</h4>
+                    </div>
+                </div>
+
+                <!-- 4 Simple Simulation Actions -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <!-- 1. Add Students -->
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-white">Add Students</h3>
+                            <div class="flex gap-1.5">
+                                <button type="button" onclick="setSimStudentCount(100)" class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[11px] text-slate-300 hover:text-white transition">100</button>
+                                <button type="button" onclick="setSimStudentCount(533)" class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[11px] text-slate-300 hover:text-white transition">533</button>
+                                <button type="button" onclick="setSimStudentCount(1200)" class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[11px] text-slate-300 hover:text-white transition">1,200</button>
+                                <button type="button" onclick="setSimStudentCount(1800)" class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[11px] text-slate-300 hover:text-white transition">1,800</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="sim-student-count" min="1" max="1800" value="533" class="w-28 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white font-bold outline-none focus:border-[#38BDF8]">
+                            <button id="btn-batch-populate" onclick="executeBatchPopulate()" class="flex-1 bg-[#007BA7] hover:bg-[#0284C7] text-white py-1.5 px-3 rounded-lg text-xs font-bold transition">
+                                Add Students
+                            </button>
+                        </div>
+                        <label class="flex items-center space-x-2 text-[11px] text-slate-400 cursor-pointer">
+                            <input type="checkbox" id="sim-auto-telemetry" checked class="rounded border-slate-700 text-[#007BA7]">
+                            <span>Auto-sync initial telemetry</span>
+                        </label>
+                    </div>
+
+                    <!-- 2. Auto-Sync Sensors -->
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-4 flex flex-col justify-between space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-white">Auto-Sync Sensors</h3>
+                            <span class="text-[10px] text-[#10B981] font-semibold bg-[#052825] px-2 py-0.5 rounded border border-[#0D5C52]">SDG 6 & 12</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400">Advance calendar by 1 day and log smart meter telemetry for occupied rooms.</p>
+                        <button id="btnSyncSensors" onclick="triggerSensorSimulation()" class="w-full bg-[#052825] hover:bg-[#073D39] text-[#10B981] border border-[#0D5C52] py-2 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1.5">
+                            <span id="syncSensorPulse" class="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></span>
+                            <span id="syncSensorText">Auto-Sync Sensors</span>
+                        </button>
+                    </div>
+
+                    <!-- 3. Simulate Grievances -->
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-4 flex flex-col justify-between space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-white">Simulate Grievances</h3>
+                            <span class="text-[10px] text-[#EAAA00] font-semibold bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/40">SLA Dispatch</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400">Generate stochastic maintenance tickets and auto-assign technicians.</p>
+                        <button id="btn-simulate-tickets" onclick="triggerTicketSimulation()" class="w-full bg-[#2D1B00] hover:bg-[#402600] text-[#EAAA00] border border-[#7A4E00] py-2 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#EAAA00] animate-pulse"></span>
+                            <span>Simulate Grievances</span>
+                        </button>
+                    </div>
+
+                    <!-- 4. Delete All Records -->
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-4 flex flex-col justify-between space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-white">Delete All Records</h3>
+                            <span class="text-[10px] text-[#FF2A6D] font-semibold bg-red-950/60 px-2 py-0.5 rounded border border-red-800/40">Reset</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400">Clear all student records, utility logs, and complaint documents.</p>
+                        <button id="btn-sim-delete" onclick="confirmDeleteAllRecords()" class="w-full bg-[#3D0A14] hover:bg-[#5C0F1E] text-[#FF2A6D] border border-[#80142B] py-2 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1.5">
+                            <span>Delete All Records</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
 
         </main>
     </div>
@@ -1261,15 +1343,6 @@
                     <h3 class="text-sm font-bold text-white">Log Meter Consumption</h3>
                 </div>
                 <button onclick="closeModal('utilityModal')" class="text-slate-400 hover:text-white">&times;</button>
-            </div>
-            <div class="p-3 bg-[#052825] border border-[#0D5C52] rounded-xl flex items-center justify-between text-xs">
-                <div>
-                    <div class="text-[#10B981] font-bold">Simulate Smart Sub-Meters</div>
-                    <div class="text-slate-400 text-[11px]">Auto-record IoT sensor telemetry across all rooms</div>
-                </div>
-                <button type="button" onclick="triggerSensorSimulation(true)" class="bg-[#10B981] hover:bg-[#059669] text-white px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
-                    Simulate All
-                </button>
             </div>
             <form id="utilityForm" onsubmit="submitUtilityLog(event)" class="space-y-3.5 text-xs">
                 <!-- Utility Type Selector -->
@@ -1481,10 +1554,36 @@
         </div>
     </div>
 
+    <!-- MODAL 7: DELETE ALL RECORDS CONFIRMATION -->
+    <div id="deleteConfirmModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-[#80142B] rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
+            <div class="flex items-center space-x-3 text-[#FF2A6D]">
+                <div class="w-10 h-10 rounded-xl bg-[#3D0A14] flex items-center justify-center border border-[#80142B] text-base font-bold">
+                    WIPE
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-white">Delete All System Records?</h3>
+                    <p class="text-xs text-[#94A3B8]">This action cannot be undone.</p>
+                </div>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                This will permanently purge all <strong>registered resident students</strong>, <strong>water and electricity telemetry logs</strong>, and <strong>maintenance complaint tickets</strong>. The physical 600-room architecture and technician roster will be preserved.
+            </p>
+            <div class="flex items-center justify-end space-x-3 pt-2">
+                <button type="button" onclick="closeModal('deleteConfirmModal')" class="px-4 py-2 bg-[#12141C] hover:bg-[#181C26] text-white border border-[#1E2433] rounded-xl text-xs font-semibold transition">
+                    Cancel
+                </button>
+                <button type="button" onclick="executeDeleteAllRecords()" class="px-4 py-2 bg-[#FF2A6D] hover:bg-[#E01E5A] text-white font-bold rounded-xl text-xs transition shadow-lg shadow-[#FF2A6D]/25">
+                    Yes, Delete Everything
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Frontend Script Logic -->
     <script>
         function switchTab(tabName) {
-            ['dashboard', 'heatmap', 'rooms', 'utilities', 'daywise', 'complaints', 'esg', 'students'].forEach(t => {
+            ['dashboard', 'simulations', 'heatmap', 'rooms', 'utilities', 'daywise', 'complaints', 'esg', 'students'].forEach(t => {
                 const tabEl = document.getElementById('tab-' + t);
                 if (tabEl) tabEl.classList.add('hidden');
                 const nav = document.getElementById('nav-' + t);
@@ -1501,7 +1600,9 @@
                 activeNav.className = "w-full text-left px-4 py-2.5 rounded-xl bg-[#FF2A6D] text-white font-bold shadow-lg shadow-[#FF2A6D]/25 transition";
             }
 
-            if (tabName === 'heatmap') {
+            if (tabName === 'simulations') {
+                loadSimulationStats();
+            } else if (tabName === 'heatmap') {
                 loadFloorHeatmap();
             } else if (tabName === 'utilities') {
                 loadConsumptionExplorer(false);
@@ -2761,23 +2862,34 @@ async function submitStudent(e) {
                 const resp = await fetch('/api/v1/analytics/forecast?days=7');
                 const data = await resp.json();
 
-                let canvas = document.getElementById('forecastChart');
-                if (!canvas) return;
+                const container = document.getElementById('forecastChartContainer') || document.getElementById('forecastChart')?.parentElement;
+                if (!container) return;
 
                 if (window.forecastChartInstance) {
                     window.forecastChartInstance.destroy();
                     window.forecastChartInstance = null;
                 }
 
-                // Cleanly replace canvas element to ensure correct dimensions in active tab
-                const parent = canvas.parentElement;
-                canvas.remove();
-                canvas = document.createElement('canvas');
-                canvas.id = 'forecastChart';
-                parent.appendChild(canvas);
-
                 const hist = data.historical || [];
                 const fore = data.forecast || [];
+
+                // If no data is available (0 residents / 0 telemetry logs)
+                if (data.has_data === false || (hist.length === 0 && fore.length === 0)) {
+                    container.innerHTML = `
+                        <div class="flex flex-col items-center justify-center h-full py-12 text-center border border-dashed border-[#1E2433] rounded-xl bg-slate-950/40">
+                            <svg class="w-10 h-10 text-[#52637A] mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            <p class="text-sm font-bold text-[#94A3B8]">No Forecast Data Available</p>
+                            <p class="text-xs text-[#52637A] mt-1 max-w-sm">No resident records or historical utility logs found. Populate students or ingest telemetry to generate 7-day predictive models.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Cleanly replace canvas element to ensure correct dimensions in active tab
+                container.innerHTML = '<canvas id="forecastChart"></canvas>';
+                const canvas = document.getElementById('forecastChart');
 
                 const labels = [...hist.map(h => h.log_date), ...fore.map(f => f.date + ' (F)')];
                 const waterActual = [...hist.map(h => h.total_water), ...fore.map(() => null)];
@@ -3095,6 +3207,147 @@ async function submitStudent(e) {
             }
         }
 
+        async function loadSimulationStats() {
+            try {
+                const [occResp, compResp, logResp] = await Promise.all([
+                    fetch('/api/v1/resources/occupancy'),
+                    fetch('/api/v1/complaints/'),
+                    fetch('/api/v1/resources/daywise-logs?limit=1')
+                ]);
+
+                if (occResp.ok) {
+                    const occ = await occResp.json();
+                    const totalRooms = occ.total_rooms || 0;
+                    const totalBeds = occ.total_beds || 0;
+                    const totalRes = occ.total_residents || 0;
+                    const occRate = occ.occupancy_rate || 0.0;
+
+                    const capEl = document.getElementById('sim-kpi-capacity');
+                    if (capEl) {
+                        capEl.innerText = `${totalRooms} Rooms / ${totalBeds} Beds`;
+                    }
+                    const blocksEl = document.getElementById('sim-kpi-blocks');
+                    if (blocksEl) {
+                        blocksEl.innerText = totalRooms > 0 ? '10 Blocks (A-J), 6 Floors each' : '0 Rooms Provisioned';
+                    }
+
+                    const occEl = document.getElementById('sim-kpi-occupancy');
+                    if (occEl) {
+                        occEl.innerText = `${totalRes} / ${totalBeds} Beds (${occRate}%)`;
+                    }
+                }
+
+                if (compResp.ok) {
+                    const comp = await compResp.json();
+                    const tickets = comp.data || [];
+                    const openTickets = tickets.filter(t => t.status !== 'Resolved').length;
+                    const tickEl = document.getElementById('sim-kpi-tickets');
+                    if (tickEl) {
+                        tickEl.innerText = `${openTickets} Open (${tickets.length} Total)`;
+                    }
+                }
+
+                if (logResp.ok) {
+                    const logs = await logResp.json();
+                    const count = Array.isArray(logs) ? logs.length : (logs.data ? logs.data.length : (logs.count || 0));
+                    const telEl = document.getElementById('sim-kpi-telemetry');
+                    if (telEl) {
+                        telEl.innerText = count > 0 ? `${count}+ Records` : '0 Records';
+                    }
+                }
+            } catch (err) {
+                console.error("Error loading simulation stats:", err);
+            }
+        }
+
+        function setSimStudentCount(count) {
+            const input = document.getElementById('sim-student-count');
+            if (input) input.value = count;
+        }
+
+        async function executeBatchPopulate() {
+            const countInput = document.getElementById('sim-student-count');
+            const autoTel = document.getElementById('sim-auto-telemetry')?.checked ?? true;
+            const count = parseInt(countInput?.value || '1800', 10);
+            if (isNaN(count) || count < 1 || count > 1800) {
+                showToast('Please enter a student count between 1 and 1,800.', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('btn-batch-populate');
+            const originalText = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse mr-2 inline-block"></span><span>Populating Students & Rooms...</span>';
+            }
+
+            try {
+                const resp = await fetch('/api/v1/resources/batch-populate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ count: count, auto_sync_telemetry: autoTel })
+                });
+                const data = await resp.json();
+                if (resp.ok) {
+                    showToast(`Successfully registered ${count} students across 600 rooms!`, 'success');
+                    if (typeof loadAllData === 'function') loadAllData();
+                    if (typeof loadFloorHeatmap === 'function') loadFloorHeatmap();
+                    if (typeof loadDaywiseDirectory === 'function') loadDaywiseDirectory();
+                    if (typeof loadEcoScorecard === 'function') loadEcoScorecard();
+                    if (typeof loadResourceForecast === 'function') loadResourceForecast();
+                    loadSimulationStats();
+                } else {
+                    showToast(`Population error: ${data.detail || 'Failed to populate'}`, 'error');
+                }
+            } catch (err) {
+                showToast(`Network error: ${err.message}`, 'error');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                }
+            }
+        }
+
+        function confirmDeleteAllRecords() {
+            openModal('deleteConfirmModal');
+        }
+
+        async function executeDeleteAllRecords() {
+            closeModal('deleteConfirmModal');
+            const btn = document.getElementById('btn-sim-delete');
+            const originalText = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse mr-2 inline-block"></span><span>Wiping Records...</span>';
+            }
+
+            try {
+                const resp = await fetch('/api/v1/resources/delete-all-records', {
+                    method: 'POST'
+                });
+                const data = await resp.json();
+                if (resp.ok) {
+                    showToast('All resident, telemetry, and complaint records wiped cleanly.', 'info');
+                    if (typeof loadAllData === 'function') loadAllData();
+                    if (typeof loadFloorHeatmap === 'function') loadFloorHeatmap();
+                    if (typeof loadDaywiseDirectory === 'function') loadDaywiseDirectory();
+                    if (typeof loadEcoScorecard === 'function') loadEcoScorecard();
+                    if (typeof loadResourceForecast === 'function') loadResourceForecast();
+                    loadSimulationStats();
+                } else {
+                    showToast(`Wipe error: ${data.detail || 'Failed to wipe database'}`, 'error');
+                }
+            } catch (err) {
+                showToast(`Network error: ${err.message}`, 'error');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                }
+            }
+        }
+
         window.onload = function() {
             loadAllData();
             loadConsumptionExplorer(false);
@@ -3104,6 +3357,7 @@ async function submitStudent(e) {
             loadFloorHeatmap();
             loadEcoScorecard();
             loadResourceForecast();
+            loadSimulationStats();
         };
     </script>
 </body>
