@@ -317,9 +317,6 @@
                 <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full text-left px-4 py-2.5 rounded-xl bg-[#FF2A6D] text-white font-bold shadow-lg shadow-[#FF2A6D]/25 transition">
                     <span>Dashboard</span>
                 </button>
-                <button onclick="switchTab('simulations')" id="nav-simulations" class="w-full text-left px-4 py-2.5 rounded-xl text-[#E2E8F0] hover:text-[#FFFFFF] hover:bg-[#0F1E33] transition font-semibold">
-                    <span>Simulation Studio</span>
-                </button>
                 <button onclick="switchTab('heatmap')" id="nav-heatmap" class="w-full text-left px-4 py-2.5 rounded-xl text-[#E2E8F0] hover:text-[#FFFFFF] hover:bg-[#0F1E33] transition font-semibold">
                     <span>2D Floor Heatmap</span>
                 </button>
@@ -340,6 +337,9 @@
                 </button>
                 <button onclick="switchTab('students')" id="nav-students" class="w-full text-left px-4 py-2.5 rounded-xl text-[#E2E8F0] hover:text-[#FFFFFF] hover:bg-[#0F1E33] transition font-semibold">
                     <span>Residents Directory</span>
+                </button>
+                <button onclick="switchTab('simulations')" id="nav-simulations" class="w-full text-left px-4 py-2.5 rounded-xl text-[#E2E8F0] hover:text-[#FFFFFF] hover:bg-[#0F1E33] transition font-semibold">
+                    <span>Simulation Studio</span>
                 </button>
             </nav>
         </div>
@@ -530,190 +530,6 @@
                 </div>
             </div>
 
-            <!-- SECTION: SIMULATION & OPERATIONS STUDIO -->
-            <div id="tab-simulations" class="space-y-6 hidden">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#1E2433] pb-4">
-                    <div>
-                        <h2 class="text-lg font-bold text-white flex items-center space-x-2">
-                            <span>Simulation Studio & Operations Hub</span>
-                        </h2>
-                        <p class="text-xs text-[#52637A] mt-0.5">Centralized command studio for resident populations, IoT smart telemetry auto-syncing, grievance simulation, and complete system database wipes</p>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <button onclick="loadSimulationStats()" class="bg-[#12141C] hover:bg-[#181C26] text-white border border-[#1E2433] px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm">
-                            Refresh Status
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Simulation Live KPI Bar -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="bg-slate-900 border border-[#1E2433] rounded-2xl p-4 shadow-sm">
-                        <span class="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider">Hostel Capacity</span>
-                        <h4 class="text-xl font-extrabold text-white mt-1" id="sim-kpi-capacity">0 Rooms / 0 Beds</h4>
-                        <p class="text-[11px] text-[#94A3B8] mt-0.5 font-semibold" id="sim-kpi-blocks">0 Rooms Provisioned</p>
-                    </div>
-                    <div class="bg-slate-900 border border-[#1E2433] rounded-2xl p-4 shadow-sm">
-                        <span class="text-[11px] font-bold text-[#38BDF8] uppercase tracking-wider">Bed Occupancy</span>
-                        <h4 class="text-xl font-extrabold text-[#38BDF8] mt-1" id="sim-kpi-occupancy">-- Beds</h4>
-                        <p class="text-[11px] text-[#94A3B8] mt-0.5 font-semibold">Active resident population</p>
-                    </div>
-                    <div class="bg-slate-900 border border-[#1E2433] rounded-2xl p-4 shadow-sm">
-                        <span class="text-[11px] font-bold text-[#10B981] uppercase tracking-wider">IoT Telemetry Logs</span>
-                        <h4 class="text-xl font-extrabold text-[#10B981] mt-1" id="sim-kpi-telemetry">-- Logs</h4>
-                        <p class="text-[11px] text-[#94A3B8] mt-0.5 font-semibold">Daywise water & power readings</p>
-                    </div>
-                    <div class="bg-slate-900 border border-[#1E2433] rounded-2xl p-4 shadow-sm">
-                        <span class="text-[11px] font-bold text-[#FF2A6D] uppercase tracking-wider">Maintenance Grievances</span>
-                        <h4 class="text-xl font-extrabold text-[#FF2A6D] mt-1" id="sim-kpi-tickets">-- Tickets</h4>
-                        <p class="text-[11px] text-[#94A3B8] mt-0.5 font-semibold">Under active SLA dispatch</p>
-                    </div>
-                </div>
-
-                <!-- Simulation Action Cards Grid (2x2) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                    <!-- CARD 1: ADD STUDENTS -->
-                    <div class="bg-slate-900 border border-[#1E2433] rounded-2xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
-                        <div class="space-y-3">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-2.5">
-                                    <div class="w-9 h-9 rounded-xl bg-[#007BA7]/15 border border-[#007BA7]/30 flex items-center justify-center text-[#38BDF8] font-black text-sm">
-                                        STU
-                                    </div>
-                                    <div>
-                                        <h3 class="text-sm font-bold text-white">Add Students & Populate Rooms</h3>
-                                        <span class="text-[11px] text-[#38BDF8] font-semibold">Resident Population Setup</span>
-                                    </div>
-                                </div>
-                                <span class="text-xs px-2.5 py-1 rounded-lg bg-cyan-950/60 text-[#38BDF8] border border-cyan-800/40 font-bold">1 - 1,800 Beds</span>
-                            </div>
-                            <p class="text-xs text-[#94A3B8] leading-relaxed">
-                                Automatically provision 600 rooms across Blocks A-J and register resident students up to the 1,800 bed limit (3 beds per room). Automatically syncs 7 days of initial telemetry for occupied rooms.
-                            </p>
-
-                            <!-- Preset Pills -->
-                            <div>
-                                <label class="block text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider mb-1.5">Quick Count Presets</label>
-                                <div class="flex flex-wrap gap-2">
-                                    <button type="button" onclick="setSimStudentCount(100)" class="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-semibold text-slate-300 hover:border-[#38BDF8] hover:text-white transition">100</button>
-                                    <button type="button" onclick="setSimStudentCount(533)" class="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-semibold text-slate-300 hover:border-[#38BDF8] hover:text-white transition">533</button>
-                                    <button type="button" onclick="setSimStudentCount(1200)" class="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-semibold text-slate-300 hover:border-[#38BDF8] hover:text-white transition">1,200</button>
-                                    <button type="button" onclick="setSimStudentCount(1800)" class="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs font-semibold text-slate-300 hover:border-[#38BDF8] hover:text-white transition">1,800 (Full)</button>
-                                </div>
-                            </div>
-
-                            <!-- Count Input -->
-                            <div class="space-y-1">
-                                <label class="block text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider">Number of Students to Register</label>
-                                <input type="number" id="sim-student-count" min="1" max="1800" value="533" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 focus:border-[#38BDF8] outline-none font-bold">
-                            </div>
-
-                            <label class="flex items-center space-x-2 text-xs text-slate-300 cursor-pointer pt-1">
-                                <input type="checkbox" id="sim-auto-telemetry" checked class="rounded border-slate-700 text-[#007BA7] focus:ring-0">
-                                <span>Auto-sync initial 7-day utility telemetry for occupied rooms</span>
-                            </label>
-                        </div>
-
-                        <button id="btn-batch-populate" onclick="executeBatchPopulate()" class="w-full bg-[#007BA7] hover:bg-[#0284C7] text-white py-3 rounded-xl text-xs font-bold shadow-lg shadow-[#007BA7]/20 transition flex items-center justify-center space-x-2">
-                            <span>Populate Students</span>
-                        </button>
-                    </div>
-
-                    <!-- CARD 2: AUTO-SYNC SENSORS -->
-                    <div class="bg-slate-900 border border-[#1E2433] rounded-2xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
-                        <div class="space-y-3">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-2.5">
-                                    <div class="w-9 h-9 rounded-xl bg-[#052825] border border-[#0D5C52] flex items-center justify-center text-[#10B981] font-black text-sm">
-                                        IoT
-                                    </div>
-                                    <div>
-                                        <h3 class="text-sm font-bold text-white">Auto-Sync Sensors</h3>
-                                        <span class="text-[11px] text-[#10B981] font-semibold">Smart Sub-Meter Telemetry</span>
-                                    </div>
-                                </div>
-                                <span class="text-xs px-2.5 py-1 rounded-lg bg-[#052825] text-[#10B981] border border-[#0D5C52] font-bold">SDG 6 + 12</span>
-                            </div>
-                            <p class="text-xs text-[#94A3B8] leading-relaxed">
-                                Polls automated IoT smart meters across all currently occupied rooms. Advances the hostel timeline by 1 day, records per-capita water (Liters) and power (kWh), and identifies abnormal leaks and power spikes.
-                            </p>
-                            <div class="p-3 bg-slate-950/70 border border-[#1E2433] rounded-xl text-xs text-slate-300 space-y-1">
-                                <div class="flex justify-between"><span class="text-slate-400">Target Rooms:</span><span class="font-bold text-white">Occupied Rooms Only</span></div>
-                                <div class="flex justify-between"><span class="text-slate-400">Timeline Step:</span><span class="font-bold text-[#10B981]">+1 Calendar Day</span></div>
-                                <div class="flex justify-between"><span class="text-slate-400">Anomaly Detection:</span><span class="font-bold text-amber-400">Leak & Surge Flagging</span></div>
-                            </div>
-                        </div>
-
-                        <button onclick="triggerSensorSimulation()" class="w-full bg-[#052825] hover:bg-[#073D39] text-[#10B981] border border-[#0D5C52] py-3 rounded-xl text-xs font-bold shadow-lg shadow-[#052825]/30 transition flex items-center justify-center space-x-2">
-                            <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
-                            <span>Auto-Sync Sensors (Advance 1 Day)</span>
-                        </button>
-                    </div>
-
-                    <!-- CARD 3: SIMULATE GRIEVANCES -->
-                    <div class="bg-slate-900 border border-[#1E2433] rounded-2xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
-                        <div class="space-y-3">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-2.5">
-                                    <div class="w-9 h-9 rounded-xl bg-[#2D1B00] border border-[#7A4E00] flex items-center justify-center text-[#EAAA00] font-black text-sm">
-                                        TKT
-                                    </div>
-                                    <div>
-                                        <h3 class="text-sm font-bold text-white">Simulate Daily Grievances</h3>
-                                        <span class="text-[11px] text-[#EAAA00] font-semibold">Stochastic Maintenance Dispatch</span>
-                                    </div>
-                                </div>
-                                <span class="text-xs px-2.5 py-1 rounded-lg bg-amber-950/60 text-[#EAAA00] border border-amber-800/40 font-bold">Poisson Model</span>
-                            </div>
-                            <p class="text-xs text-[#94A3B8] leading-relaxed">
-                                Uses a mathematical Poisson distribution scaled to active room occupancy to generate realistic daily maintenance tickets. Automatically assigns each ticket to the least-loaded technician matching the trade with SLA targets.
-                            </p>
-                            <div class="p-3 bg-slate-950/70 border border-[#1E2433] rounded-xl text-xs text-slate-300 space-y-1">
-                                <div class="flex justify-between"><span class="text-slate-400">Trade Match:</span><span class="font-bold text-white">Plumbing, Electrical, Sanitation</span></div>
-                                <div class="flex justify-between"><span class="text-slate-400">SLA Enforced:</span><span class="font-bold text-[#EAAA00]">4h, 12h, or 24h Deadlines</span></div>
-                                <div class="flex justify-between"><span class="text-slate-400">Staff Assigned:</span><span class="font-bold text-white">Least-Loaded Technician</span></div>
-                            </div>
-                        </div>
-
-                        <button onclick="triggerTicketSimulation()" class="w-full bg-[#2D1B00] hover:bg-[#402600] text-[#EAAA00] border border-[#7A4E00] py-3 rounded-xl text-xs font-bold shadow-lg shadow-[#2D1B00]/30 transition flex items-center justify-center space-x-2">
-                            <span class="w-2 h-2 rounded-full bg-[#EAAA00] animate-pulse"></span>
-                            <span>Simulate Daily Grievances</span>
-                        </button>
-                    </div>
-
-                    <!-- CARD 4: DELETE ALL RECORDS -->
-                    <div class="bg-slate-900 border border-[#1E2433] rounded-2xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
-                        <div class="space-y-3">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-2.5">
-                                    <div class="w-9 h-9 rounded-xl bg-[#3D0A14] border border-[#80142B] flex items-center justify-center text-[#FF2A6D] font-black text-sm">
-                                        WIPE
-                                    </div>
-                                    <div>
-                                        <h3 class="text-sm font-bold text-white">Delete All Records</h3>
-                                        <span class="text-[11px] text-[#FF2A6D] font-semibold">Complete Database Purge</span>
-                                    </div>
-                                </div>
-                                <span class="text-xs px-2.5 py-1 rounded-lg bg-red-950/60 text-[#FF2A6D] border border-red-800/40 font-bold">Destructive</span>
-                            </div>
-                            <p class="text-xs text-[#94A3B8] leading-relaxed">
-                                Safely clear all resident students, utility telemetry records, and maintenance complaint tickets. Resets room occupancy to 0 beds while preserving the physical 600 rooms and technician rosters.
-                            </p>
-                            <div class="p-3 bg-red-950/30 border border-[#80142B]/40 rounded-xl text-xs text-red-200/90 space-y-1">
-                                <div class="flex justify-between"><span>Students Cleared:</span><span class="font-bold text-white">All</span></div>
-                                <div class="flex justify-between"><span>Telemetry Cleared:</span><span class="font-bold text-white">Water & Power Logs</span></div>
-                                <div class="flex justify-between"><span>Complaints Cleared:</span><span class="font-bold text-white">All Tickets</span></div>
-                            </div>
-                        </div>
-
-                        <button id="btn-sim-delete" onclick="confirmDeleteAllRecords()" class="w-full bg-[#3D0A14] hover:bg-[#5C0F1E] text-[#FF2A6D] border border-[#80142B] py-3 rounded-xl text-xs font-bold shadow-lg shadow-[#3D0A14]/30 transition flex items-center justify-center space-x-2">
-                            <span>Delete All Records</span>
-                        </button>
-                    </div>
-
-                </div>
-            </div>
             <div id="tab-rooms" class="space-y-6 hidden">
                 <div class="flex items-center justify-between">
                     <div>
@@ -1381,6 +1197,102 @@
                     </div>
                 </div>
             </div>
+            <!-- SECTION: SIMULATION STUDIO (COMPACT & SIMPLE) -->
+            <div id="tab-simulations" class="space-y-4 hidden">
+                <div class="flex items-center justify-between border-b border-[#1E2433] pb-3">
+                    <h2 class="text-base font-bold text-white">Simulation Studio</h2>
+                    <button onclick="loadSimulationStats()" class="bg-[#12141C] hover:bg-[#181C26] text-white border border-[#1E2433] px-3 py-1.5 rounded-xl text-xs font-semibold transition">
+                        Refresh
+                    </button>
+                </div>
+
+                <!-- Simple Stats Strip -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-3.5">
+                        <span class="text-[10px] font-semibold text-[#94A3B8] uppercase">Capacity</span>
+                        <h4 class="text-base font-bold text-white mt-0.5" id="sim-kpi-capacity">0 Rooms / 0 Beds</h4>
+                    </div>
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-3.5">
+                        <span class="text-[10px] font-semibold text-[#38BDF8] uppercase">Occupancy</span>
+                        <h4 class="text-base font-bold text-[#38BDF8] mt-0.5" id="sim-kpi-occupancy">0 / 0 Beds (0%)</h4>
+                    </div>
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-3.5">
+                        <span class="text-[10px] font-semibold text-[#10B981] uppercase">Telemetry</span>
+                        <h4 class="text-base font-bold text-[#10B981] mt-0.5" id="sim-kpi-telemetry">0 Records</h4>
+                    </div>
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-3.5">
+                        <span class="text-[10px] font-semibold text-[#FF2A6D] uppercase">Grievances</span>
+                        <h4 class="text-base font-bold text-[#FF2A6D] mt-0.5" id="sim-kpi-tickets">0 Open</h4>
+                    </div>
+                </div>
+
+                <!-- 4 Simple Simulation Actions -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <!-- 1. Add Students -->
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-white">Add Students</h3>
+                            <div class="flex gap-1.5">
+                                <button type="button" onclick="setSimStudentCount(100)" class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[11px] text-slate-300 hover:text-white transition">100</button>
+                                <button type="button" onclick="setSimStudentCount(533)" class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[11px] text-slate-300 hover:text-white transition">533</button>
+                                <button type="button" onclick="setSimStudentCount(1200)" class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[11px] text-slate-300 hover:text-white transition">1,200</button>
+                                <button type="button" onclick="setSimStudentCount(1800)" class="px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-[11px] text-slate-300 hover:text-white transition">1,800</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="sim-student-count" min="1" max="1800" value="533" class="w-28 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white font-bold outline-none focus:border-[#38BDF8]">
+                            <button id="btn-batch-populate" onclick="executeBatchPopulate()" class="flex-1 bg-[#007BA7] hover:bg-[#0284C7] text-white py-1.5 px-3 rounded-lg text-xs font-bold transition">
+                                Add Students
+                            </button>
+                        </div>
+                        <label class="flex items-center space-x-2 text-[11px] text-slate-400 cursor-pointer">
+                            <input type="checkbox" id="sim-auto-telemetry" checked class="rounded border-slate-700 text-[#007BA7]">
+                            <span>Auto-sync initial telemetry</span>
+                        </label>
+                    </div>
+
+                    <!-- 2. Auto-Sync Sensors -->
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-4 flex flex-col justify-between space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-white">Auto-Sync Sensors</h3>
+                            <span class="text-[10px] text-[#10B981] font-semibold bg-[#052825] px-2 py-0.5 rounded border border-[#0D5C52]">SDG 6 & 12</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400">Advance calendar by 1 day and log smart meter telemetry for occupied rooms.</p>
+                        <button onclick="triggerSensorSimulation()" class="w-full bg-[#052825] hover:bg-[#073D39] text-[#10B981] border border-[#0D5C52] py-2 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></span>
+                            <span>Auto-Sync Sensors</span>
+                        </button>
+                    </div>
+
+                    <!-- 3. Simulate Grievances -->
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-4 flex flex-col justify-between space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-white">Simulate Grievances</h3>
+                            <span class="text-[10px] text-[#EAAA00] font-semibold bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/40">SLA Dispatch</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400">Generate stochastic maintenance tickets and auto-assign technicians.</p>
+                        <button onclick="triggerTicketSimulation()" class="w-full bg-[#2D1B00] hover:bg-[#402600] text-[#EAAA00] border border-[#7A4E00] py-2 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#EAAA00] animate-pulse"></span>
+                            <span>Simulate Grievances</span>
+                        </button>
+                    </div>
+
+                    <!-- 4. Delete All Records -->
+                    <div class="bg-slate-900 border border-[#1E2433] rounded-xl p-4 flex flex-col justify-between space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-white">Delete All Records</h3>
+                            <span class="text-[10px] text-[#FF2A6D] font-semibold bg-red-950/60 px-2 py-0.5 rounded border border-red-800/40">Reset</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400">Clear all student records, utility logs, and complaint documents.</p>
+                        <button id="btn-sim-delete" onclick="confirmDeleteAllRecords()" class="w-full bg-[#3D0A14] hover:bg-[#5C0F1E] text-[#FF2A6D] border border-[#80142B] py-2 rounded-lg text-xs font-bold transition flex items-center justify-center space-x-1.5">
+                            <span>Delete All Records</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
 
         </main>
     </div>
