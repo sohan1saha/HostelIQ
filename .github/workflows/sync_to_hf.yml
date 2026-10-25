@@ -19,4 +19,10 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          if [ -z "$HF_TOKEN" ]; then
+            echo "ERROR: HF_TOKEN secret is missing in GitHub repository settings!"
+            echo "Please go to Settings -> Secrets and variables -> Actions and add HF_TOKEN."
+            exit 1
+          fi
           git push --force https://Shubbu806:$HF_TOKEN@huggingface.co/spaces/Shubbu806/hostelIQ master:main
+
