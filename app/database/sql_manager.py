@@ -495,16 +495,19 @@ class SQLManager:
 
 
     def get_occupancy_stats(self):
-        """Returns total residents, total beds, and occupancy percentage."""
+        """Returns total residents, total beds, total rooms, and occupancy percentage."""
         with self.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT COALESCE(SUM(capacity), 0) FROM rooms")
-            total_beds = cursor.fetchone()[0] or 0
+            cursor.execute("SELECT COUNT(*), COALESCE(SUM(capacity), 0) FROM rooms")
+            row = cursor.fetchone()
+            total_rooms = row[0] if row else 0
+            total_beds = row[1] if row else 0
             cursor.execute("SELECT COUNT(*) FROM students")
             total_students = cursor.fetchone()[0] or 0
             occupancy_pct = round((total_students / total_beds * 100), 1) if total_beds > 0 else 0.0
             return {
                 "total_residents": total_students,
+                "total_rooms": total_rooms,
                 "total_beds": total_beds,
                 "occupancy_rate": occupancy_pct
             }

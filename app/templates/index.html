@@ -550,8 +550,8 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="bg-slate-900 border border-[#1E2433] rounded-2xl p-4 shadow-sm">
                         <span class="text-[11px] font-bold text-[#94A3B8] uppercase tracking-wider">Hostel Capacity</span>
-                        <h4 class="text-xl font-extrabold text-white mt-1">600 Rooms / 1,800 Beds</h4>
-                        <p class="text-[11px] text-[#94A3B8] mt-0.5 font-semibold">10 Blocks (A-J), 6 Floors each</p>
+                        <h4 class="text-xl font-extrabold text-white mt-1" id="sim-kpi-capacity">0 Rooms / 0 Beds</h4>
+                        <p class="text-[11px] text-[#94A3B8] mt-0.5 font-semibold" id="sim-kpi-blocks">0 Rooms Provisioned</p>
                     </div>
                     <div class="bg-slate-900 border border-[#1E2433] rounded-2xl p-4 shadow-sm">
                         <span class="text-[11px] font-bold text-[#38BDF8] uppercase tracking-wider">Bed Occupancy</span>
@@ -3313,9 +3313,23 @@ async function submitStudent(e) {
 
                 if (occResp.ok) {
                     const occ = await occResp.json();
+                    const totalRooms = occ.total_rooms || 0;
+                    const totalBeds = occ.total_beds || 0;
+                    const totalRes = occ.total_residents || 0;
+                    const occRate = occ.occupancy_rate || 0.0;
+
+                    const capEl = document.getElementById('sim-kpi-capacity');
+                    if (capEl) {
+                        capEl.innerText = `${totalRooms} Rooms / ${totalBeds} Beds`;
+                    }
+                    const blocksEl = document.getElementById('sim-kpi-blocks');
+                    if (blocksEl) {
+                        blocksEl.innerText = totalRooms > 0 ? '10 Blocks (A-J), 6 Floors each' : '0 Rooms Provisioned';
+                    }
+
                     const occEl = document.getElementById('sim-kpi-occupancy');
                     if (occEl) {
-                        occEl.innerText = `${occ.total_residents || 0} / ${occ.total_beds || 1800} Beds (${occ.occupancy_rate || 0}%)`;
+                        occEl.innerText = `${totalRes} / ${totalBeds} Beds (${occRate}%)`;
                     }
                 }
 
