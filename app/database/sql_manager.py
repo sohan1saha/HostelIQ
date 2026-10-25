@@ -926,12 +926,31 @@ class SQLManager:
             historical_rows = [dict(row) for row in cursor.fetchall()]
 
             cursor.execute("SELECT COUNT(DISTINCT room_id) FROM students")
-            active_rooms = cursor.fetchone()[0] or 1
+            active_rooms = cursor.fetchone()[0] or 0
+
+            cursor.execute("SELECT COUNT(*) FROM students")
+            total_students = cursor.fetchone()[0] or 0
+
+        # If there are no students or no historical telemetry records, return empty state with has_data: False
+        if total_students == 0 or len(historical_rows) == 0:
+            return {
+                "model": "Holt-Winters Exponential Smoothing (EWMA alpha=0.35, beta=0.15)",
+                "historical": [],
+                "forecast": [],
+                "has_data": False,
+                "message": "No resident records or utility telemetry found. Add students to generate demand forecast.",
+                "summary": {
+                    "avg_historical_water": 0.0,
+                    "avg_historical_elec": 0.0,
+                    "projected_7day_water": 0.0,
+                    "projected_7day_elec": 0.0,
+                }
+            }
 
         if len(historical_rows) < 3:
             today_dt = date.today()
-            base_water = active_rooms * 118.0
-            base_elec = active_rooms * 5.4
+            base_water = max(1, active_rooms) * 118.0
+            base_elec = max(1, active_rooms) * 5.4
             historical_rows = []
             for i in range(7, 0, -1):
                 d = (today_dt - timedelta(days=i)).isoformat()
@@ -982,6 +1001,7 @@ class SQLManager:
             "model": "Holt-Winters Exponential Smoothing (EWMA alpha=0.35, beta=0.15)",
             "historical": historical_rows,
             "forecast": forecast_points,
+            "has_data": True,
             "summary": {
                 "avg_historical_water": round(sum(w_vals) / len(w_vals), 2),
                 "avg_historical_elec": round(sum(e_vals) / len(e_vals), 2),

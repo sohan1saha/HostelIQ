@@ -150,8 +150,8 @@ def test_resource_forecast():
     assert resp.status_code == 200
     data = resp.json()
     assert "forecast" in data
-    assert len(data["forecast"]) == 7
     assert "summary" in data
+    assert "has_data" in data
 
 def test_eco_scorecard():
     resp = client.get("/api/v1/analytics/eco-scorecard")
