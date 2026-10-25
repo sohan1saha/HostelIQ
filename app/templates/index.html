@@ -569,10 +569,6 @@
                         <p class="text-xs text-[#52637A] mt-0.5">Sustainably analyze, compare, and conjoin water & electricity usage room-wise, floor-wise, block-wise, or custom cohorts</p>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <button onclick="triggerSensorSimulation()" class="bg-[#052825] hover:bg-[#073D39] text-[#10B981] border border-[#0D5C52] px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center space-x-1.5" title="Simulate automated IoT smart meter telemetry ingestion">
-                            <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
-                            <span>Simulate IoT Telemetry</span>
-                        </button>
                         <button onclick="openModal('utilityModal')" class="bg-[#FF2A6D] hover:bg-[#E01E5A] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg shadow-[#FF2A6D]/25 transition">Log Meter Reading</button>
                     </div>
                 </div>
@@ -799,10 +795,6 @@
                         </a>
                         <button onclick="openPrintAuditSummary()" class="px-3 py-2 bg-[#12141C] hover:bg-[#181C26] text-white border border-[#1E2433] font-bold rounded-xl text-xs transition flex items-center space-x-1.5 shadow-sm" title="Printable executive audit summary">
                             <span>Print / Audit Summary</span>
-                        </button>
-                        <button onclick="triggerSensorSimulation()" class="bg-[#052825] hover:bg-[#073D39] text-[#10B981] border border-[#0D5C52] px-3 py-2 rounded-xl text-xs font-bold transition shadow-sm flex items-center space-x-1.5" title="Simulate automated IoT smart meter telemetry ingestion">
-                            <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
-                            <span>Auto-Sync Sensors</span>
                         </button>
                         <button onclick="loadDaywiseDirectory()" class="bg-[#0C2340] hover:bg-[#13355F] text-[#38BDF8] border border-[#1E3A5F] px-3.5 py-2 rounded-xl text-xs font-bold transition shadow-sm">
                             <span>Refresh</span>
@@ -1261,15 +1253,6 @@
                     <h3 class="text-sm font-bold text-white">Log Meter Consumption</h3>
                 </div>
                 <button onclick="closeModal('utilityModal')" class="text-slate-400 hover:text-white">&times;</button>
-            </div>
-            <div class="p-3 bg-[#052825] border border-[#0D5C52] rounded-xl flex items-center justify-between text-xs">
-                <div>
-                    <div class="text-[#10B981] font-bold">Simulate Smart Sub-Meters</div>
-                    <div class="text-slate-400 text-[11px]">Auto-record IoT sensor telemetry across all rooms</div>
-                </div>
-                <button type="button" onclick="triggerSensorSimulation(true)" class="bg-[#10B981] hover:bg-[#059669] text-white px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm">
-                    Simulate All
-                </button>
             </div>
             <form id="utilityForm" onsubmit="submitUtilityLog(event)" class="space-y-3.5 text-xs">
                 <!-- Utility Type Selector -->
