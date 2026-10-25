@@ -173,3 +173,54 @@ def simulate_telemetry(payload: Optional[TelemetrySimulationRequest] = None):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to simulate telemetry: {str(e)}")
+
+class BatchPopulateRequest(BaseModel):
+    count: int = Field(1800, ge=1, le=1800, description="Number of students to populate (1 to 1800)")
+    auto_sync_telemetry: bool = Field(True, description="Whether to auto-sync initial telemetry for occupied rooms")
+
+@router.post("/batch-populate", status_code=status.HTTP_201_CREATED, summary="Batch Provision Rooms and Populate Students")
+def batch_populate_students(payload: BatchPopulateRequest):
+    try:
+        from database_scripts.populate_full_hostel import populate_database
+        populate_database(target_student_count=payload.count)
+
+        telemetry_synced = 0
+        if payload.auto_sync_telemetry:
+            from datetime import date, timedelta
+            today_dt = date.today()
+            for i in range(6, -1, -1):
+                sync_date = (today_dt - timedelta(days=i)).isoformat()
+                sql_manager.simulate_telemetry_batch(target_date=sync_date)
+            telemetry_synced = 7
+
+        stats = sql_manager.get_occupancy_stats()
+        return {
+            "status": "success",
+            "message": f"Successfully registered {payload.count} students across 600 rooms.",
+            "data": {
+                "registered_students": stats["total_residents"],
+                "total_beds": stats["total_beds"],
+                "occupancy_rate": stats["occupancy_rate"],
+                "telemetry_days_synced": telemetry_synced
+            }
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to populate students: {str(e)}")
+
+@router.post("/delete-all-records", summary="Purge All System Records")
+def delete_all_system_records():
+    try:
+        from database_scripts.reset_db import empty_database
+        empty_database()
+        return {
+            "status": "success",
+            "message": "All resident, telemetry, and maintenance records have been wiped cleanly.",
+            "data": {
+                "residents": 0,
+                "telemetry": 0,
+                "complaints": 0
+            }
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to wipe database: {str(e)}")
+

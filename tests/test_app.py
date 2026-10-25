@@ -225,3 +225,10 @@ def test_student_transfer():
         }
         resp = client.post("/api/v1/resources/students/transfer", json=transfer_payload)
         assert resp.status_code in [200, 400]
+
+def test_simulation_batch_populate():
+    resp = client.post("/api/v1/resources/batch-populate", json={"count": 50, "auto_sync_telemetry": False})
+    assert resp.status_code == 201
+    data = resp.json()
+    assert data["status"] == "success"
+    assert data["data"]["registered_students"] == 50
